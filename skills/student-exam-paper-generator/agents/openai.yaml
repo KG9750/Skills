@@ -1,0 +1,7 @@
+interface:
+  display_name: "学生试卷生成器"
+  short_description: "支持按截图或知识点生成可打印PDF考试卷和参考答案卷"
+  default_prompt: "Use $student-exam-paper-generator to generate printable PDF exam papers and answer sheets."
+
+policy:
+  allow_implicit_invocation: true
