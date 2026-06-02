@@ -25,6 +25,12 @@ When the user supplies a famous manga, artist, studio, or franchise as a referen
 
 Default to `finished-comic-pages` for "make this into a comic webpage" if the user expects final comic art rather than a script.
 
+For all modes that generate artwork, the base image must stay free of empty white
+speech balloons, empty caption rectangles, fake lettering areas, and other
+dialogue placeholders. Reserve visual breathing room through composition only.
+Add actual white-backed dialogue/caption boxes later in a separate lettering
+layer, then place Chinese text inside those overlay boxes.
+
 ## Beat Extraction
 
 Convert prose into production beats before writing panels/pages:
@@ -106,7 +112,7 @@ Use this format for `finished-comic-pages`:
 - Alt: A finished comic page showing the protagonist seeing a red danger trajectory in a crowded subway.
 ```
 
-For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. Keep image text out of the art unless the user explicitly requests embedded lettering.
+For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. Keep image text out of the art unless the user explicitly requests embedded lettering. Do not ask the image model to leave blank white speech balloons or caption boxes; if readable dialogue is needed, create those boxes in the later HTML/SVG/CSS lettering layer.
 
 ## Chapter Density
 
@@ -149,7 +155,7 @@ Keep prompt anchors consistent across all pages. If image generation produces a 
 When generating final artwork with imagegen:
 
 1. Generate a style sample or first finished page when style consistency is high risk.
-2. Inspect the output for character consistency, action clarity, clean gutters, mobile readability, and absence of readable fake text, logo, or watermark.
+2. Inspect the output for character consistency, action clarity, clean gutters, mobile readability, and absence of readable fake text, blank white speech/caption placeholders, logo, or watermark.
 3. For project assets, copy selected images from `~/.codex/generated_images/...` into the workspace under `public/panels/`. Preserve the originals in `~/.codex/generated_images/...`.
 4. Use `c01-p001.png` names for storyboard panel assets and `page-001.png` names for finished page assets.
 5. Update `public/asset-manifest.json` after copying assets.
@@ -164,8 +170,9 @@ Use this prompt base and adapt it per panel/page:
 ```text
 Finished full-color vertical comic page, [character anchor], [story action],
 [setting], [composition/page layout], [lighting and palette], expressive comic
-storytelling, clean gutters, readable at mobile width, no readable text, no logo,
-no watermark, no exact artist/style copy, no copied character design, aspect ratio 9:16.
+storytelling, clean gutters, readable at mobile width, no text, no readable text,
+no blank speech balloons, no blank caption boxes, no logo, no watermark,
+no exact artist/style copy, no copied character design, aspect ratio 9:16.
 ```
 
 When a safe urban action influence is requested, use craft language instead of named-style imitation:
@@ -176,4 +183,4 @@ sharp movement diagonals, expressive reaction beats, clear action geography,
 focused professional timing, original character designs, no recognizable protected scene
 ```
 
-Dialogue and captions should stay in HTML by default so they remain editable, accessible, and localizable.
+Dialogue and captions should stay in HTML/SVG/CSS by default so they remain editable, accessible, and localizable. When producing a lettered final page, draw the white-backed speech/caption boxes in that overlay layer and place the Chinese text inside those boxes; never depend on empty white placeholders baked into the base artwork.

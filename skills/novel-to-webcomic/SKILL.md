@@ -17,6 +17,11 @@ The normal deliverable is a production-oriented package:
 - Generated or user-provided comic assets under `public/panels/`.
 - A React/Vite webcomic reader, either inside an existing app or copied from `assets/vite-webcomic-template/`.
 
+Finished artwork and rough comic bases must not contain empty white speech balloons,
+caption boxes, or other dialogue placeholders baked into the image. Generate clean
+art only, then add readable Chinese captions/dialogue later through an HTML/SVG/CSS
+lettering layer that draws its own white-backed text boxes.
+
 ## First Checks
 
 1. Confirm the source is user-provided, licensed, public-domain, or summarized by the user. If the user asks to adapt a copyrighted novel they did not provide, ask for licensed text or a short user-written summary instead.
@@ -25,7 +30,7 @@ The normal deliverable is a production-oriented package:
    - `storyboard-panels`: one image per panel, best for pacing review.
    - `finished-comic-pages`: one image per finished comic page containing multiple internal panels, best when the user asks for 直接出漫画, 成稿, 不要分镜, or final comic artwork.
    - `html-overlay-dialogue`: artwork has no readable text; captions/dialogue are rendered by HTML for editability and mobile fit.
-4. Identify art direction, rating/tone, chapter count, language, target reader, and whether images should be generated now or only planned.
+4. Identify art direction, rating/tone, chapter count, language, target reader, whether images should be generated now or only planned, and whether the final lettering should be HTML, SVG, or CSS overlay.
 
 ## Style Reference Boundary
 
@@ -33,7 +38,7 @@ When the user names a famous manga, comic, artist, studio, or franchise, use onl
 
 - Allowed: "都市动作漫画节奏、强烈斜线构图、冷峻城市惊险感."
 - Avoid: copying a named artist's exact line style, character design, signature expressions, panel layouts, lettering, logos, or recognizable scenes.
-- Image prompts should include negative constraints such as `no exact artist/style copy, no copied character design, no readable text, no logo, no watermark`.
+- Image prompts should include negative constraints such as `no exact artist/style copy, no copied character design, no readable text, no blank speech balloons, no blank caption boxes, no logo, no watermark`.
 - If the user cites *City Hunter*, 北条司, 80s urban hardboiled action comedy, or similar references, read `references/urban-action-style.md` and translate the reference into type structure, pacing, city staging, emotional reveals, and action clarity. Do not reproduce the source work's characters, gags, weapons staging, exact page designs, lettering, or recognizable scenes.
 
 ## Retro Urban Action Manga Mode
@@ -70,10 +75,11 @@ exact copied panel layout, logo, watermark.
 1. **Intake and scope**: collect source text, rights boundary, chapter boundaries, output mode, language, visual style, and publishing constraints.
 2. **Adaptation**: extract beats, compress scenes, choose panel/page count, rewrite narration into visual action, and keep dialogue short.
 3. **Visual bible**: define recurring character anchors, locations, props, palette, lighting, shot language, continuity rules, and style-reference boundaries.
-4. **Image plan**: write prompts with character anchors, composition, mood, negative constraints, aspect ratio, and exact output path.
+4. **Image plan**: write prompts with character anchors, composition, mood, negative constraints, aspect ratio, and exact output path. Prompts must ask for clean art without empty white dialogue/caption placeholders.
 5. **Artwork production**: for final art, generate one style sample or first comic page before a large batch when the task allows iteration; copy selected outputs from `~/.codex/generated_images/...` into `public/panels/` and keep originals in place.
-6. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
-7. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, and check assets load.
+6. **Lettering layer**: add captions/dialogue after artwork generation by drawing white-backed text boxes in HTML/SVG/CSS. Position Chinese text inside those boxes; do not rely on image-generated blank areas.
+7. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
+8. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, and check assets load.
 
 Read `references/adaptation-workflow.md` when planning story adaptation, output mode, comic scripts, or image prompts. Read `references/urban-action-style.md` when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read `references/city-hunter-technique-notes.md` when the user asks specifically for City Hunter, Tsukasa Hojo, technique analysis, source-backed notes, or style constraints. Read `references/webcomic-app.md` when building or modifying the React/Vite reader.
 
@@ -140,6 +146,7 @@ Use `c01-p001.png` style names for `storyboard-panels`; use `page-001.png` style
 
 - The adaptation should read like a comic production plan, not prose pasted into panels.
 - Finished pages should be real comic artwork, not wireframe-like SVG placeholders, unless the user asked for rough structure.
+- Generated base art should not contain empty white speech balloons, empty caption boxes, or other placeholder lettering areas; those belong only in the later lettering layer.
 - Character descriptions and generated artwork must stay consistent enough for chapter continuity.
 - The webpage must be responsive, readable on mobile, keyboard accessible for key controls, and free of text/panel overlap.
 - Run `scripts/validate_manifest.py` against the generated project before final delivery.

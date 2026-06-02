@@ -97,6 +97,7 @@ Supported `format` values:
 - Avoid text overlap by rendering speech/dialogue beneath or over carefully reserved panel regions.
 - Keep first viewport useful: title, current chapter, progress, source link if present, and the first panel/page or cover should be visible.
 - Use actual bitmap art for final production. Placeholder SVGs are acceptable for script/layout review only.
+- Base artwork should not include empty white speech balloons, caption boxes, or lettering placeholders. If the final reader needs on-image lettering, render white-backed text boxes in the HTML/SVG/CSS layer and place the caption/dialogue text inside those overlay boxes.
 
 ## Manifest Validation
 
