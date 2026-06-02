@@ -1,6 +1,6 @@
 ---
 name: novel-to-webcomic
-description: Use when adapting user-provided, licensed, or public-domain novels, chapters, outlines, or prose into comics, webtoons, manga, manhua, graphic-novel scripts, finished comic page assets, image prompts, asset manifests, and React/Vite webcomic webpages. Triggers include requests like 把小说改编成漫画, 直接出漫画, 成稿漫画网页, 小说转漫画网页, webtoon, manga, manhua, comic adaptation, storyboard, panel script, safe City Hunter-like urban action pacing, or webcomic reader.
+description: Use when adapting user-provided, licensed, or public-domain novels, chapters, outlines, or prose into comics, webtoons, manga, manhua, graphic-novel scripts, finished comic page assets, image prompts, asset manifests, and React/Vite webcomic webpages. Also use for original retro 1980s-1990s urban action manga storyboards, detective/commission-driven comic cases, hardboiled action-comedy visual bibles, and source-safe City Hunter technique analysis. Triggers include requests like 把小说改编成漫画, 直接出漫画, 成稿漫画网页, 小说转漫画网页, webtoon, manga, manhua, comic adaptation, storyboard, panel script, 都市动作漫画, 侦探漫画, 委托型漫画, 硬派枪战喜剧分镜, 复古日漫视觉 bible, 漫画分镜技法分析, safe City Hunter-like urban action pacing, or webcomic reader.
 ---
 
 # Novel to Webcomic
@@ -36,6 +36,35 @@ When the user names a famous manga, comic, artist, studio, or franchise, use onl
 - Image prompts should include negative constraints such as `no exact artist/style copy, no copied character design, no readable text, no logo, no watermark`.
 - If the user cites *City Hunter*, 北条司, 80s urban hardboiled action comedy, or similar references, read `references/urban-action-style.md` and translate the reference into type structure, pacing, city staging, emotional reveals, and action clarity. Do not reproduce the source work's characters, gags, weapons staging, exact page designs, lettering, or recognizable scenes.
 
+## Retro Urban Action Manga Mode
+
+Use this mode inside `novel-to-webcomic` when the user asks for 都市动作漫画, 侦探漫画, 委托型漫画, hardboiled action-comedy storyboards, retro 1980s-1990s urban manga mood, or City Hunter technique analysis.
+
+- Build original cases, characters, locations, visual motifs, and panel plans. Do not create a separate skill handoff.
+- Translate City Hunter-era influence into craft language: cinematic manga paneling, realistic city backgrounds, adult-proportion character design, clear action causality, pressure-release comedy timing, and commission-driven story structure.
+- Do not ask for work "in the style of Tsukasa Hojo", "北条司风格", or any living-artist imitation. Avoid franchise character names, exact props, catchphrases, costumes, layouts, gags, or recognizable scenes.
+- Modernize dated sexual-comedy dynamics. Preserve ego puncture, status loss, social misread, slapstick consequence, and fast tonal recovery without normalizing harassment.
+
+Before writing panels or prompts, define the craft spine:
+
+1. **City function**: assign each location a job, such as commission point, information point, surveillance perch, chase corridor, retreat point, or emotional quiet point.
+2. **Action causality**: every action sequence needs a target, obstacle, tactical choice, visible consequence, and changed power relation.
+3. **Distance map**: track who is close, separated, watching, blocked, or crossing a threshold.
+4. **Tone switch**: place comedy after pressure has accumulated, then return quickly to the case objective.
+5. **Character states**: keep serious/professional, private/vulnerable, and comic-break states connected by stable silhouette anchors.
+
+For original retro urban action prompts, use this pattern:
+
+```text
+Original retro 1980s-1990s urban action manga panel, [shot size and angle],
+[fictional city location and function], [original character description],
+[specific action with cause and consequence], cinematic paneling,
+realistic city background detail, expressive but non-franchise character design,
+[black-and-white ink / limited color / screentone], [lighting and mood].
+Negative: living artist imitation, franchise characters, recognizable City Hunter scene,
+exact copied panel layout, logo, watermark.
+```
+
 ## Workflow
 
 1. **Intake and scope**: collect source text, rights boundary, chapter boundaries, output mode, language, visual style, and publishing constraints.
@@ -46,7 +75,7 @@ When the user names a famous manga, comic, artist, studio, or franchise, use onl
 6. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
 7. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, and check assets load.
 
-Read `references/adaptation-workflow.md` when planning story adaptation, output mode, comic scripts, or image prompts. Read `references/urban-action-style.md` when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read `references/webcomic-app.md` when building or modifying the React/Vite reader.
+Read `references/adaptation-workflow.md` when planning story adaptation, output mode, comic scripts, or image prompts. Read `references/urban-action-style.md` when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read `references/city-hunter-technique-notes.md` when the user asks specifically for City Hunter, Tsukasa Hojo, technique analysis, source-backed notes, or style constraints. Read `references/webcomic-app.md` when building or modifying the React/Vite reader.
 
 ## Build Web Apps Coordination
 

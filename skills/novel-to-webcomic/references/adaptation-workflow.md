@@ -15,7 +15,7 @@ Collect only what materially changes the adaptation:
 
 If the source is copyrighted and not provided by the user, request a licensed excerpt or short summary. Do not invent detailed scene-by-scene adaptation from a copyrighted book the user has not supplied.
 
-When the user supplies a famous manga, artist, studio, or franchise as a reference, convert it into reusable craft terms: type structure, pacing, shot rhythm, lighting mood, emotional mechanics, and action clarity. Do not imitate exact line style, character design, signature gags, lettering, page layouts, or recognizable scenes. For *City Hunter* / 北条司 / 80s urban action comedy references, read `urban-action-style.md`.
+When the user supplies a famous manga, artist, studio, or franchise as a reference, convert it into reusable craft terms: type structure, pacing, shot rhythm, lighting mood, emotional mechanics, and action clarity. Do not imitate exact line style, character design, signature gags, lettering, page layouts, or recognizable scenes. For *City Hunter* / 北条司 / 80s urban action comedy references, read `urban-action-style.md`; when the user asks for source-backed technique analysis or constraints, also read `city-hunter-technique-notes.md`.
 
 ## Mode Selection
 
