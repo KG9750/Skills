@@ -1,0 +1,4 @@
+interface:
+  display_name: "Retro Urban Action Manga"
+  short_description: "Create original retro urban action manga storyboards and visual bibles"
+  default_prompt: "Use $retro-urban-action-manga to create an original retro urban action-comedy manga storyboard and visual bible."

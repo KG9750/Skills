@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600" role="img" aria-labelledby="title desc">
+  <title id="title">Finished comic page sample two</title>
+  <desc id="desc">A finished comic page sample with a rescue action and surveillance-room hook.</desc>
+  <rect width="900" height="1600" fill="#f5f1ea"/>
+  <rect x="18" y="18" width="864" height="450" fill="#17202b"/>
+  <rect x="18" y="488" width="864" height="394" fill="#223044"/>
+  <rect x="18" y="902" width="420" height="320" fill="#111722"/>
+  <rect x="462" y="902" width="420" height="320" fill="#121923"/>
+  <rect x="18" y="1242" width="864" height="340" fill="#0b0d12"/>
+  <g transform="translate(248 118) rotate(-9)">
+    <circle cx="72" cy="58" r="52" fill="#d8ad8e"/>
+    <path d="M26 60c12-70 96-88 124-18-38-8-78-3-124 18z" fill="#11141a"/>
+    <rect x="22" y="108" width="108" height="300" rx="44" fill="#53677c"/>
+    <rect x="112" y="146" width="238" height="52" rx="26" fill="#53677c"/>
+  </g>
+  <g transform="translate(552 128) rotate(18)">
+    <circle cx="64" cy="52" r="48" fill="#d0aa90"/>
+    <rect x="16" y="100" width="96" height="260" rx="40" fill="#858c94"/>
+  </g>
+  <path d="M392 272l230-84" stroke="#d8ad8e" stroke-width="34" stroke-linecap="round"/>
+  <path d="M170 666C340 524 564 532 756 684" stroke="#e15b4a" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <path d="M624 1058l160 72" stroke="#e15b4a" stroke-width="14" opacity=".86" stroke-linecap="round"/>
+  <g fill="#253447">
+    <rect x="86" y="1300" width="176" height="112" rx="10"/><rect x="326" y="1300" width="176" height="112" rx="10"/><rect x="566" y="1300" width="176" height="112" rx="10"/>
+  </g>
+  <circle cx="652" cy="1450" r="58" fill="#d8ad8e"/><path d="M600 1452c12-76 108-94 140-18-44-10-90-4-140 18z" fill="#07090e"/>
+</svg>

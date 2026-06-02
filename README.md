@@ -18,4 +18,6 @@ Keep future skills in the same `skills/<skill-name>/` structure so they remain i
 
 ## Included Skills
 
+- `novel-to-webcomic`: Adapts prose into comic scripts, visual bibles, finished comic assets, and React/Vite webcomic readers.
+- `retro-urban-action-manga`: Creates and analyzes original retro urban action manga storyboards, visual bibles, and technique notes.
 - `student-exam-paper-generator`: Generates printable PDF exam papers and answer sheets for students.

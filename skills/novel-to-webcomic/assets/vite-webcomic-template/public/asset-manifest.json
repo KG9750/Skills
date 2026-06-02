@@ -1,0 +1,37 @@
+{
+  "title": "雨巷里的红信",
+  "subtitle": "成稿漫画页示例",
+  "language": "zh-CN",
+  "format": "finished-comic-pages",
+  "source": "https://example.com/source-story",
+  "artDirection": "Finished full-color vertical comic pages with clean gutters, readable mobile action, editable HTML captions, and no readable text baked into generated artwork.",
+  "chapters": [
+    {
+      "id": "chapter-01",
+      "title": "第一话：雨没有停",
+      "summary": "少女快递员接下一封必须在午夜前送达的红信。",
+      "panels": [
+        {
+          "id": "page-001",
+          "image": "/panels/page-001.svg",
+          "alt": "A finished comic page showing a courier seeing a red danger path in a rainy city.",
+          "caption": "雨把整座城洗得像一张未干的画。",
+          "dialogue": ["只要送到塔顶，一切就结束了。"],
+          "sfx": "sample",
+          "panelRange": "1-5",
+          "prompt": "Finished full-color vertical comic page, rainy neon city courier thriller, clean gutters, no text, no logo, no watermark."
+        },
+        {
+          "id": "page-002",
+          "image": "/panels/page-002.svg",
+          "alt": "A finished comic page showing a rescue action and a surveillance-room hook.",
+          "caption": "门开了，却没有邀请她进去。",
+          "dialogue": ["那就算我闯入。"],
+          "sfx": "hook",
+          "panelRange": "6-10",
+          "prompt": "Finished full-color vertical comic page, rescue action and surveillance-room hook, clean gutters, no text, no logo, no watermark."
+        }
+      ]
+    }
+  ]
+}

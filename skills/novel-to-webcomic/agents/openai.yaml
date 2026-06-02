@@ -1,0 +1,4 @@
+interface:
+  display_name: "Novel to Webcomic"
+  short_description: "Adapt novels into style-safe webcomic webpages"
+  default_prompt: "Use $novel-to-webcomic to adapt this story into a style-safe comic script, finished comic assets, and a webcomic reader."

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600" role="img" aria-labelledby="title desc">
+  <title id="title">Finished comic page sample one</title>
+  <desc id="desc">A finished comic page sample with a courier seeing a red danger path in a rainy city.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#253447"/>
+      <stop offset="1" stop-color="#101216"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1600" fill="#f5f1ea"/>
+  <rect x="18" y="18" width="864" height="520" fill="url(#bg)"/>
+  <rect x="18" y="558" width="420" height="360" fill="#17212d"/>
+  <rect x="462" y="558" width="420" height="360" fill="#202936"/>
+  <rect x="18" y="938" width="864" height="300" fill="#111722"/>
+  <rect x="18" y="1258" width="864" height="324" fill="#1b2532"/>
+  <g fill="#0a0d12" opacity=".88">
+    <circle cx="190" cy="250" r="58"/><rect x="140" y="302" width="100" height="210" rx="44"/>
+    <circle cx="660" cy="230" r="62"/><rect x="604" y="288" width="112" height="240" rx="48"/>
+  </g>
+  <g transform="translate(360 184)">
+    <circle cx="82" cy="68" r="58" fill="#d8ad8e"/>
+    <path d="M28 68c12-76 112-96 142-18-45-11-92-5-142 18z" fill="#11141a"/>
+    <rect x="28" y="124" width="116" height="300" rx="46" fill="#53677c"/>
+  </g>
+  <path d="M492 260C626 190 708 210 776 332" stroke="#e15b4a" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <path d="M776 332l-70-24M776 332l-26-70" stroke="#e15b4a" stroke-width="16" stroke-linecap="round"/>
+  <rect x="116" y="646" width="206" height="126" rx="8" fill="#e15b4a" opacity=".7"/>
+  <path d="M530 675h210M530 728h160M530 781h236" stroke="#e6eef4" stroke-width="18" opacity=".35" stroke-linecap="round"/>
+  <circle cx="450" cy="1086" r="68" fill="#d8ad8e"/><path d="M386 1086c14-88 126-106 164-20-48-10-102-2-164 20z" fill="#11141a"/>
+  <path d="M170 1418c140-150 334-170 560-60" stroke="#42b5a6" stroke-width="18" fill="none" opacity=".75"/>
+</svg>
