@@ -74,7 +74,7 @@ Use this pass before writing storyboard panels or finished pages:
    - aspect-to-aspect for atmosphere, city texture, or emotional pause.
 6. **Dialogue compression**: keep dialogue that creates conflict, reveals character, changes the choice, or lands the beat. Replace explanatory dialogue with image information where possible.
 7. **Lettering budget**: before final art, confirm every caption or speech line can fit a white-backed overlay box without covering the key face, hand, prop, or action.
-8. **Text-image match**: assign each line to a specific panel and visible object/person. Dialogue belongs with the speaker or the reaction it causes; captions belong with the exact visual beat they summarize.
+8. **Text-image binding**: assign each line to a specific panel and visible object/person before writing image prompts or lettering coordinates. Dialogue belongs with the speaker or the reaction it causes; captions belong with the exact visual beat they summarize. If a line has no visible subject, rewrite the page beat or change the art plan before generation.
 
 Panel beat test:
 
@@ -85,6 +85,7 @@ For each panel, answer:
 - Which exact story beat would break if this panel were removed?
 - Is the text doing something the image cannot already do?
 - Is every dialogue/caption line attached to the correct visible panel?
+- Would any text still make sense if moved to another panel? If yes, make it more specific or cut it.
 ```
 
 If a panel fails this test, merge, cut, or rewrite it. If a page has no escalation, reveal, reversal, or emotional punctuation, rebuild the page plan before generating art.
@@ -105,18 +106,18 @@ Before image generation, write a page layout line such as:
 Asymmetrical manga page layout: one large lower-half alley panel, two small phone/face inserts, one narrow vertical reaction panel, one wide top establishing panel; varied panel sizes, not equal horizontal strips.
 ```
 
-For final art prompts, explicitly say what each major panel shows and why it is large, small, wide, or vertical. A page with only evenly stacked panels should be rejected unless the user's requested format is a deliberately simple vertical storyboard.
+For final art prompts, explicitly say what each major panel shows and why it is large, small, wide, vertical, side-by-side, or dominant. A page with only evenly stacked panels should be rejected unless the user's requested format is a deliberately simple vertical storyboard or the page plan explicitly uses monotony for emotion.
 
 ## Lettering Distinction
 
 Use separate wording and typography rules for captions, dialogue, phone UI, and SFX:
 
 - **Caption/description**: no quotation marks; concise visual or time/emotion bridge.
-- **Dialogue/speech**: wrap Chinese speech in Chinese quotation marks, e.g. `“能治吗？”`.
+- **Dialogue/speech**: final visible Chinese speech must use Chinese quotation marks, e.g. `“能治吗？”`. This applies to speech balloons, white-backed boxes, and phone/chat dialogue that is presented as spoken or messaged dialogue.
 - **Phone/message UI**: can use sender labels or UI-style labels, but avoid copying real app branding.
 - **SFX**: short sound text; keep it visually distinct but still inside the chosen lettering convention if the project requires white-backed boxes.
 
-When using an HTML/SVG/CSS lettering layer, store the text type so dialogue can automatically receive quotation marks while captions remain unquoted.
+When using an HTML/SVG/CSS lettering layer, store the text type so dialogue can automatically receive quotation marks while captions remain unquoted. If source data or `adaptation.md` keeps raw dialogue text, the renderer must add Chinese quotes before the visible final page is exported.
 
 For urban action comedy or private-justice chapters, add a craft pass after beat extraction:
 
@@ -139,7 +140,7 @@ Use this format for `storyboard-panels`:
 - Characters: Mei, anxious, soaked hair tucked behind one ear.
 - Caption: 雨把整座城洗得像一张未干的画。
 - Dialogue:
-  - Mei: 只要送到塔顶，一切就结束了。
+  - Mei: “只要送到塔顶，一切就结束了。”
 - SFX: drip drip
 - Prompt: Vertical webtoon panel, rain-soaked neon alley, young courier...
 - Negative prompt: no exact artist/style copy, no copied character design, no readable text, no logo, no watermark
@@ -168,7 +169,7 @@ Use this format for `finished-comic-pages`:
 - Page composition: One tall 9:16 page sheet with clean gutters and 4-7 internal comic panels.
 - Caption: 第一页：危险先于现实亮起。
 - Dialogue:
-  - 严存: 现实还没发生。
+  - 严存: “现实还没发生。”
 - Prompt: Finished full-color vertical comic page, contemporary subway thriller...
 - Negative prompt: no exact artist/style copy, no copied character design, no readable text, no logo, no watermark
 - Asset: public/panels/page-001.png
@@ -176,6 +177,14 @@ Use this format for `finished-comic-pages`:
 ```
 
 For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. The prompt should describe a varied page design with large, small, wide, vertical, and insert panels chosen for story purpose. Keep image text out of the art unless the user explicitly requests embedded lettering. Do not ask the image model to leave blank white speech balloons or caption boxes; if readable dialogue is needed, create those boxes in the later HTML/SVG/CSS lettering layer.
+
+Finished-page rejection checks before delivery:
+
+- Reject pages that read as rough wireframe storyboards when the user asked for final comic art.
+- Reject pages that are only equal-height horizontal strips unless the page plan explicitly justifies monotony.
+- Reject any base image with blank white dialogue/caption placeholders, generated labels, fake lettering, or readable text.
+- Reject lettering where a line sits beside an unrelated action, face, or prop.
+- Reject final visible Chinese dialogue that lacks Chinese quotation marks, or captions that incorrectly use quotation marks.
 
 ## Chapter Density
 

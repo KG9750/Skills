@@ -32,7 +32,7 @@ lettering layer that draws its own white-backed text boxes.
    - `html-overlay-dialogue`: artwork has no readable text; captions/dialogue are rendered by HTML for editability and mobile fit.
 4. Identify art direction, rating/tone, chapter count, language, target reader, whether images should be generated now or only planned, and whether the final lettering should be HTML, SVG, or CSS overlay.
 5. For long prose, do not move directly from manuscript paragraphs to panels. First extract a chapter spine, select only scenes that change plot, emotion, or power relation, then break those scenes into page turns and panel beats.
-6. Separate lettering types before final output: dialogue/speech should be visibly distinguished from captions, and Chinese dialogue should be wrapped in Chinese quotation marks inside the lettering box unless the user requests another convention.
+6. Separate lettering types before final output: dialogue/speech should be visibly distinguished from captions, and final visible Chinese dialogue must be wrapped in Chinese quotation marks inside the lettering box unless the user requests another convention. Captions/descriptions stay unquoted.
 
 ## Style Reference Boundary
 
@@ -81,7 +81,7 @@ exact copied panel layout, logo, watermark.
 5. **Artwork production**: for final art, generate one style sample or first comic page before a large batch when the task allows iteration; copy selected outputs from `~/.codex/generated_images/...` into `public/panels/` and keep originals in place.
 6. **Lettering layer**: add captions/dialogue after artwork generation by drawing white-backed text boxes in HTML/SVG/CSS. Position Chinese text inside those boxes; do not rely on image-generated blank areas. Match every text box to the panel content it describes or the character/object that speaks.
 7. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
-8. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, and check assets load.
+8. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, check assets load, and visually inspect that dialogue quotation, panel layout variety, and text-image matching all pass.
 
 Read `references/adaptation-workflow.md` when planning story adaptation, output mode, comic scripts, or image prompts. Read `references/urban-action-style.md` when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read `references/city-hunter-technique-notes.md` when the user asks specifically for City Hunter, Tsukasa Hojo, technique analysis, source-backed notes, or style constraints. Read `references/webcomic-app.md` when building or modifying the React/Vite reader.
 
@@ -149,10 +149,13 @@ Use `c01-p001.png` style names for `storyboard-panels`; use `page-001.png` style
 - The adaptation should read like a comic production plan, not prose pasted into panels.
 - Each panel should carry one visible action, reaction, reveal, or mood turn; if a prose sentence does not change what the reader can see or infer, merge it into a nearby panel or cut it.
 - Page plans should be built around page-turn beats: establish, escalate, reveal, reverse, or cliffhanger. Avoid even, mechanical paragraph-to-panel mapping.
-- Finished page layouts should vary panel scale and direction according to emotion and story function: wide panels for location/pressure, vertical panels for isolation or pursuit, small inserts for phone/props/injury details, large dominant panels for the page's emotional or action peak. Avoid simple equal-height top-to-bottom strips unless that monotony is intentionally serving the scene.
+- Before writing image prompts or lettering coordinates, bind every caption/dialogue/SFX line to a target page panel and visible subject: speaker, reaction, prop, location, wound, phone, or action. If no suitable visual subject exists, rewrite the beat or regenerate/recompose the page.
+- Final visible Chinese dialogue must use Chinese quotation marks, e.g. `“能治吗？”`. Captions and pure descriptions must not use quotation marks. If the data model stores dialogue without quotes, the lettering renderer must add them automatically before output.
+- Finished page layouts should vary panel scale and direction according to emotion and story function: wide panels for location/pressure, vertical panels for isolation or pursuit, small inserts for phone/props/injury details, side-by-side panels for contrast or call-and-response, and large dominant panels for the page's emotional or action peak. Reject simple equal-height top-to-bottom strips unless that monotony is intentionally serving the scene and is stated in the page plan.
 - Text-image matching is mandatory: a dialogue line must sit on the same panel as the speaker or the immediate reaction to that line; a caption must describe the exact visible beat under it. Do not place a line next to an unrelated action just because there is empty space.
 - Finished pages should be real comic artwork, not wireframe-like SVG placeholders, unless the user asked for rough structure.
 - Generated base art should not contain empty white speech balloons, empty caption boxes, or other placeholder lettering areas; those belong only in the later lettering layer.
+- White-backed lettering boxes belong only to the lettering layer. If base art contains blank white placeholder areas, fake balloons, fake text, or generated labels, treat the page as failed and regenerate or replace the base art before delivery.
 - Character descriptions and generated artwork must stay consistent enough for chapter continuity.
 - The webpage must be responsive, readable on mobile, keyboard accessible for key controls, and free of text/panel overlap.
 - Run `scripts/validate_manifest.py` against the generated project before final delivery.
