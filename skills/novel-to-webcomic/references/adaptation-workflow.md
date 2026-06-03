@@ -56,6 +56,68 @@ One sentence for the chapter's dramatic promise.
 
 Compress internal monologue into visible choices, props, expressions, and short captions. Keep only narration that adds meaning the image cannot carry.
 
+## Long Prose to Panel Breakdown
+
+Do not adapt long prose by assigning one paragraph to one panel. First reduce the prose into decisions the reader can see, then rebuild those decisions as page and panel rhythm.
+
+Use this pass before writing storyboard panels or finished pages:
+
+1. **Chapter spine**: write the chapter promise, emotional direction, conflict, midpoint turn, climax, and final hook in 5-7 bullets.
+2. **Scene selection**: keep scenes that change information, emotion, location, relationship, danger, or goal. Merge or cut purely explanatory prose.
+3. **Visual inventory**: list concrete people, props, locations, body actions, weather, damage, distance, and expressions. Convert internal thought into these external signals first.
+4. **Page allocation**: give more space to entrances, choices, reversals, reveals, fights, and quiet emotional beats. Summaries, travel, repeated worry, and exposition get fewer panels or captions.
+5. **Panel transitions**: decide what the reader must infer between panels. Use:
+   - moment-to-moment only for suspense, hesitation, pain, or micro-comedy;
+   - action-to-action for clear physical progression;
+   - subject-to-subject for conversations, searches, and cross-cut tension;
+   - scene-to-scene for time/location jumps;
+   - aspect-to-aspect for atmosphere, city texture, or emotional pause.
+6. **Dialogue compression**: keep dialogue that creates conflict, reveals character, changes the choice, or lands the beat. Replace explanatory dialogue with image information where possible.
+7. **Lettering budget**: before final art, confirm every caption or speech line can fit a white-backed overlay box without covering the key face, hand, prop, or action.
+8. **Text-image match**: assign each line to a specific panel and visible object/person. Dialogue belongs with the speaker or the reaction it causes; captions belong with the exact visual beat they summarize.
+
+Panel beat test:
+
+```markdown
+For each panel, answer:
+- What visibly changes from the previous panel?
+- What must the reader infer in the gutter?
+- Which exact story beat would break if this panel were removed?
+- Is the text doing something the image cannot already do?
+- Is every dialogue/caption line attached to the correct visible panel?
+```
+
+If a panel fails this test, merge, cut, or rewrite it. If a page has no escalation, reveal, reversal, or emotional punctuation, rebuild the page plan before generating art.
+
+## Page Composition Rhythm
+
+Do not default finished comic pages to uniform horizontal strips. Compose pages around the emotional job of the beat:
+
+- **Large dominant panel**: use for the page's strongest emotion, location pressure, decisive action, or reveal.
+- **Wide panel**: use for city pressure, rain, crowding, pursuit direction, or establishing geography.
+- **Vertical panel**: use for isolation, falling/rising distance, doorways, alleys, thresholds, and surveillance.
+- **Small insert**: use for phone balance, wound, hand choice, object clue, payment, or tiny reaction.
+- **Side-by-side pair**: use for contrast, call-and-response dialogue, before/after choice, or two simultaneous subjects.
+
+Before image generation, write a page layout line such as:
+
+```text
+Asymmetrical manga page layout: one large lower-half alley panel, two small phone/face inserts, one narrow vertical reaction panel, one wide top establishing panel; varied panel sizes, not equal horizontal strips.
+```
+
+For final art prompts, explicitly say what each major panel shows and why it is large, small, wide, or vertical. A page with only evenly stacked panels should be rejected unless the user's requested format is a deliberately simple vertical storyboard.
+
+## Lettering Distinction
+
+Use separate wording and typography rules for captions, dialogue, phone UI, and SFX:
+
+- **Caption/description**: no quotation marks; concise visual or time/emotion bridge.
+- **Dialogue/speech**: wrap Chinese speech in Chinese quotation marks, e.g. `“能治吗？”`.
+- **Phone/message UI**: can use sender labels or UI-style labels, but avoid copying real app branding.
+- **SFX**: short sound text; keep it visually distinct but still inside the chosen lettering convention if the project requires white-backed boxes.
+
+When using an HTML/SVG/CSS lettering layer, store the text type so dialogue can automatically receive quotation marks while captions remain unquoted.
+
 For urban action comedy or private-justice chapters, add a craft pass after beat extraction:
 
 - Surface mask: what makes the lead seem weak, unserious, low-status, or unreliable?
@@ -91,6 +153,7 @@ Panel rules:
 - Use varied shots: establishing, medium, close-up, insert, reaction, transition.
 - Preserve spatial continuity across consecutive panels.
 - Keep dialogue short enough to fit speech balloons.
+- Keep text and image matched: do not attach a line to a panel that depicts an unrelated action.
 - Prefer present-tense visual descriptions.
 - Avoid camera language that cannot be seen in the generated image.
 
@@ -112,7 +175,7 @@ Use this format for `finished-comic-pages`:
 - Alt: A finished comic page showing the protagonist seeing a red danger trajectory in a crowded subway.
 ```
 
-For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. Keep image text out of the art unless the user explicitly requests embedded lettering. Do not ask the image model to leave blank white speech balloons or caption boxes; if readable dialogue is needed, create those boxes in the later HTML/SVG/CSS lettering layer.
+For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. The prompt should describe a varied page design with large, small, wide, vertical, and insert panels chosen for story purpose. Keep image text out of the art unless the user explicitly requests embedded lettering. Do not ask the image model to leave blank white speech balloons or caption boxes; if readable dialogue is needed, create those boxes in the later HTML/SVG/CSS lettering layer.
 
 ## Chapter Density
 
