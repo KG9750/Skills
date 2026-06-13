@@ -1,0 +1,4 @@
+interface:
+  display_name: "Certo（刺儿头）"
+  short_description: "Adversarial reviews with hard recommendations"
+  default_prompt: "Use $certo to review this and point out the highest-risk problems."
