@@ -76,8 +76,10 @@ exact copied panel layout, logo, watermark.
 
 1. **Intake and scope**: collect source text, rights boundary, chapter boundaries, output mode, language, visual style, and publishing constraints.
 2. **Adaptation**: extract beats, compress scenes, choose panel/page count, rewrite narration into visual action, plan panel-to-panel transitions, and keep dialogue short.
+   - For `finished-comic-pages`, a text-only name pass is mandatory before image prompts. It must confirm panel beats, page blocks, entry/exit hook, reading path, and text-image binding for every page.
 3. **Visual bible**: define recurring character anchors, locations, props, palette, lighting, shot language, continuity rules, and style-reference boundaries.
-4. **Image plan**: write prompts with character anchors, page composition, mood, negative constraints, aspect ratio, and exact output path. Prompts must ask for clean art without empty white dialogue/caption placeholders.
+4. **Image plan**: write prompts with character anchors, page composition, mood, negative constraints, aspect ratio, and exact output path. Prompts must follow the clean-art rule in the Overview.
+   - For `finished-comic-pages`, do a thumbnail gate before full-resolution art: confirm panel block grouping, dominant panel, entry hook, exit hook, and reading path.
 5. **Artwork production**: for final art, generate one style sample or first comic page before a large batch when the task allows iteration; copy selected outputs from `~/.codex/generated_images/...` into `public/panels/` and keep originals in place.
 6. **Lettering layer**: add captions/dialogue after artwork generation by drawing white-backed text boxes in HTML/SVG/CSS. Position Chinese text inside those boxes; do not rely on image-generated blank areas. Match every text box to the panel content it describes or the character/object that speaks.
 7. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
@@ -149,13 +151,13 @@ Use `c01-p001.png` style names for `storyboard-panels`; use `page-001.png` style
 - The adaptation should read like a comic production plan, not prose pasted into panels.
 - Each panel should carry one visible action, reaction, reveal, or mood turn; if a prose sentence does not change what the reader can see or infer, merge it into a nearby panel or cut it.
 - Page plans should be built around page-turn beats: establish, escalate, reveal, reverse, or cliffhanger. Avoid even, mechanical paragraph-to-panel mapping.
+- Finished-page plans must pass a name pass and thumbnail gate before full artwork unless the user explicitly asks for a rough single-page experiment.
 - Before writing image prompts or lettering coordinates, bind every caption/dialogue/SFX line to a target page panel and visible subject: speaker, reaction, prop, location, wound, phone, or action. If no suitable visual subject exists, rewrite the beat or regenerate/recompose the page.
 - Final visible Chinese dialogue must use Chinese quotation marks, e.g. `“能治吗？”`. Captions and pure descriptions must not use quotation marks. If the data model stores dialogue without quotes, the lettering renderer must add them automatically before output.
 - Finished page layouts should vary panel scale and direction according to emotion and story function: wide panels for location/pressure, vertical panels for isolation or pursuit, small inserts for phone/props/injury details, side-by-side panels for contrast or call-and-response, and large dominant panels for the page's emotional or action peak. Reject simple equal-height top-to-bottom strips unless that monotony is intentionally serving the scene and is stated in the page plan.
 - Text-image matching is mandatory: a dialogue line must sit on the same panel as the speaker or the immediate reaction to that line; a caption must describe the exact visible beat under it. Do not place a line next to an unrelated action just because there is empty space.
 - Finished pages should be real comic artwork, not wireframe-like SVG placeholders, unless the user asked for rough structure.
-- Generated base art should not contain empty white speech balloons, empty caption boxes, or other placeholder lettering areas; those belong only in the later lettering layer.
-- White-backed lettering boxes belong only to the lettering layer. If base art contains blank white placeholder areas, fake balloons, fake text, or generated labels, treat the page as failed and regenerate or replace the base art before delivery.
+- Base art must follow the clean-art rule in the Overview: no placeholder lettering areas, fake balloons, fake text, or generated labels.
 - Character descriptions and generated artwork must stay consistent enough for chapter continuity.
 - The webpage must be responsive, readable on mobile, keyboard accessible for key controls, and free of text/panel overlap.
 - Run `scripts/validate_manifest.py` against the generated project before final delivery.
