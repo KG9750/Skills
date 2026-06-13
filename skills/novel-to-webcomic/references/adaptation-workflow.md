@@ -25,6 +25,8 @@ When the user supplies a famous manga, artist, studio, or franchise as a referen
 
 Default to `finished-comic-pages` for "make this into a comic webpage" if the user expects final comic art rather than a script.
 
+When `finished-comic-pages` is selected, a text-only name pass is required before image prompts. Here "name pass" means a manga-style ネーム pass: a lightweight page script that assigns every panel beat, text line, and page block to a concrete visual subject before artwork generation. It is not necessarily a user-facing deliverable; it is a quality gate. Skip it only when the user explicitly asks for a rough single-page experiment with no rehearsal.
+
 For all modes that generate artwork, the base image must stay free of empty white
 speech balloons, empty caption rectangles, fake lettering areas, and other
 dialogue placeholders. Reserve visual breathing room through composition only.
@@ -72,6 +74,7 @@ Use this pass before writing storyboard panels or finished pages:
    - subject-to-subject for conversations, searches, and cross-cut tension;
    - scene-to-scene for time/location jumps;
    - aspect-to-aspect for atmosphere, city texture, or emotional pause.
+     Limit aspect-to-aspect to 1-2 uses per chapter unless the page plan states a clear reason. Use it when emotion needs to settle or location atmosphere must be established without plot movement.
 6. **Dialogue compression**: keep dialogue that creates conflict, reveals character, changes the choice, or lands the beat. Replace explanatory dialogue with image information where possible.
 7. **Lettering budget**: before final art, confirm every caption or speech line can fit a white-backed overlay box without covering the key face, hand, prop, or action.
 8. **Text-image binding**: assign each line to a specific panel and visible object/person before writing image prompts or lettering coordinates. Dialogue belongs with the speaker or the reaction it causes; captions belong with the exact visual beat they summarize. If a line has no visible subject, rewrite the page beat or change the art plan before generation.
@@ -86,6 +89,8 @@ For each panel, answer:
 - Is the text doing something the image cannot already do?
 - Is every dialogue/caption line attached to the correct visible panel?
 - Would any text still make sense if moved to another panel? If yes, make it more specific or cut it.
+- Entry hook: what catches the reader's eye first on this page, and why?
+- Exit hook: what pushes the reader to keep reading after the last panel?
 ```
 
 If a panel fails this test, merge, cut, or rewrite it. If a page has no escalation, reveal, reversal, or emotional punctuation, rebuild the page plan before generating art.
@@ -93,6 +98,18 @@ If a panel fails this test, merge, cut, or rewrite it. If a page has no escalati
 ## Page Composition Rhythm
 
 Do not default finished comic pages to uniform horizontal strips. Compose pages around the emotional job of the beat:
+
+### Panel Block Grouping
+
+Before placing individual panels, divide each finished page into 2-4 functional blocks. Then assign panels inside those blocks. A page without block-level intent is usually just a list of equal-weight panels and should be restructured.
+
+| Block type | Function | Typical shape |
+| --- | --- | --- |
+| Establishing block | Location, time, pressure, spatial layout | 1 wide or large panel |
+| Exchange block | Dialogue, call-and-response, confrontation | 2-4 medium or side-by-side panels |
+| Action block | Physical movement and cause-effect chain | 2-4 panels with clear direction |
+| Reaction block | Close-up, realization, emotional pause | 1-2 close-up or insert panels |
+| Payoff block | Reversal, punchline, cliffhanger, afterbeat | 1 dominant or paired panel |
 
 - **Large dominant panel**: use for the page's strongest emotion, location pressure, decisive action, or reveal.
 - **Wide panel**: use for city pressure, rain, crowding, pursuit direction, or establishing geography.
@@ -107,6 +124,31 @@ Asymmetrical manga page layout: one large lower-half alley panel, two small phon
 ```
 
 For final art prompts, explicitly say what each major panel shows and why it is large, small, wide, vertical, side-by-side, or dominant. A page with only evenly stacked panels should be rejected unless the user's requested format is a deliberately simple vertical storyboard or the page plan explicitly uses monotony for emotion.
+
+### Thumbnail Gate
+
+Before generating full-resolution finished pages, create a thumbnail plan for each page. It can be text-only layout notation or a low-resolution rough, but it must answer:
+
+1. How many functional panel blocks are on the page, and what job does each block do?
+2. What is the entry hook: the first visual anchor the eye should land on?
+3. What is the exit hook: the final beat that creates page-turn pressure?
+4. What is the intended 2-3 step reading path through the page?
+5. Are there competing focal points that would confuse that path?
+6. Does the largest panel carry the page's strongest emotional or action beat?
+
+Reject and revise the thumbnail before full artwork if these answers are weak.
+
+### Panel Transition Rhythm
+
+Review adjacent panel transitions before final art. A page that overuses one transition type becomes monotonous or confusing.
+
+- `moment-to-moment`: max 2 consecutive; use for suspense, hesitation, pain, or micro-comedy.
+- `action-to-action`: default for clear physical sequences; can chain when direction stays readable.
+- `subject-to-subject`: default for conversations, searches, and cross-cut tension.
+- `scene-to-scene`: once per page unless the page is an intentional montage.
+- `aspect-to-aspect`: 1-2 per chapter; use for atmosphere or emotional pause, not filler.
+
+List the transition chain in the page plan, such as `scene-to-scene -> subject-to-subject x3 -> action-to-action x2 -> aspect-to-aspect`. If all transitions are the same, add variety or state why the monotony is intentional.
 
 ## Lettering Distinction
 
@@ -176,15 +218,7 @@ Use this format for `finished-comic-pages`:
 - Alt: A finished comic page showing the protagonist seeing a red danger trajectory in a crowded subway.
 ```
 
-For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. The prompt should describe a varied page design with large, small, wide, vertical, and insert panels chosen for story purpose. Keep image text out of the art unless the user explicitly requests embedded lettering. Do not ask the image model to leave blank white speech balloons or caption boxes; if readable dialogue is needed, create those boxes in the later HTML/SVG/CSS lettering layer.
-
-Finished-page rejection checks before delivery:
-
-- Reject pages that read as rough wireframe storyboards when the user asked for final comic art.
-- Reject pages that are only equal-height horizontal strips unless the page plan explicitly justifies monotony.
-- Reject any base image with blank white dialogue/caption placeholders, generated labels, fake lettering, or readable text.
-- Reject lettering where a line sits beside an unrelated action, face, or prop.
-- Reject final visible Chinese dialogue that lacks Chinese quotation marks, or captions that incorrectly use quotation marks.
+For finished pages, prompt the page as a single composed comic sheet rather than separate isolated panels. The prompt should describe a varied page design with large, small, wide, vertical, and insert panels chosen for story purpose. Follow the clean-art rule in Mode Selection; if readable dialogue is needed, create boxes in the later HTML/SVG/CSS lettering layer.
 
 ## Chapter Density
 
@@ -227,13 +261,32 @@ Keep prompt anchors consistent across all pages. If image generation produces a 
 When generating final artwork with imagegen:
 
 1. Generate a style sample or first finished page when style consistency is high risk.
-2. Inspect the output for character consistency, action clarity, clean gutters, mobile readability, and absence of readable fake text, blank white speech/caption placeholders, logo, or watermark.
+2. Inspect the output for character consistency, action clarity, clean gutters, mobile readability, and clean-art compliance from Mode Selection.
 3. For project assets, copy selected images from `~/.codex/generated_images/...` into the workspace under `public/panels/`. Preserve the originals in `~/.codex/generated_images/...`.
 4. Use `c01-p001.png` names for storyboard panel assets and `page-001.png` names for finished page assets.
 5. Update `public/asset-manifest.json` after copying assets.
 6. Re-run manifest validation and browser QA.
 
 Do not leave project-referenced artwork only under `~/.codex/generated_images/...`.
+
+## Pre-Delivery Rejection Checklist
+
+Run this checklist on every finished page before delivery. Any `YES` is a rejection and requires revision, regeneration, or re-lettering.
+
+| # | Rejection condition |
+| --- | --- |
+| 1 | Page reads as rough wireframe/storyboard instead of finished comic art when final art was requested. |
+| 2 | Page uses only equal-height horizontal strips without a stated emotional or formal reason. |
+| 3 | Finished-page mode skipped the name pass or thumbnail gate without explicit user request for a rough experiment. |
+| 4 | Base art contains blank white speech/caption placeholders, fake text, generated labels, logos, or watermarks. |
+| 5 | Dialogue sits on a panel that does not contain the speaker or the immediate reaction to that line. |
+| 6 | Caption describes a beat that is not visible in its panel. |
+| 7 | Visible Chinese dialogue lacks Chinese quotation marks, or captions/descriptions incorrectly use quotation marks. |
+| 8 | Page has no clear entry hook, exit hook, escalation, reveal, reversal, or emotional punctuation. |
+| 9 | Reading path is unclear because competing focal points fight the intended panel order. |
+| 10 | Panel transition chain is all one type without a stated reason. |
+| 11 | Character appearance contradicts the visual bible or previously approved reference page. |
+| 12 | Text boxes cover key faces, hands, wounds, clues, action contact points, or the emotional focal point. |
 
 ## Image Prompt Pattern
 
@@ -255,4 +308,4 @@ sharp movement diagonals, expressive reaction beats, clear action geography,
 focused professional timing, original character designs, no recognizable protected scene
 ```
 
-Dialogue and captions should stay in HTML/SVG/CSS by default so they remain editable, accessible, and localizable. When producing a lettered final page, draw the white-backed speech/caption boxes in that overlay layer and place the Chinese text inside those boxes; never depend on empty white placeholders baked into the base artwork.
+Dialogue and captions should stay in HTML/SVG/CSS by default so they remain editable, accessible, and localizable. When producing a lettered final page, draw the white-backed speech/caption boxes in that overlay layer and place the Chinese text inside those boxes; keep the base art clean as defined in Mode Selection.
