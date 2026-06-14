@@ -1,0 +1,4 @@
+interface:
+  display_name: "XHS Post Packager"
+  short_description: "Create XHS image posts with optional draft-fill assist"
+  default_prompt: "Use $xhs-post-packager to turn my topic into a humanized 5-10 image Xiaohongshu post package, with publish-assist payload if needed."
