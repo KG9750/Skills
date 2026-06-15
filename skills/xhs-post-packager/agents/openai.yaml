@@ -1,0 +1,4 @@
+interface:
+  display_name: "XHS Post Packager"
+  short_description: "Create XHS image post packages with cover art, 10+ search tags, and GitHub project cover rules"
+  default_prompt: "Use $xhs-post-packager to turn my topic into a humanized 5-10 image Xiaohongshu post package, with 10+ search tags, source-aware cover metadata, and publish-assist payload if needed."

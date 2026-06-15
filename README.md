@@ -21,3 +21,4 @@ Keep future skills in the same `skills/<skill-name>/` structure so they remain i
 - `certo`: Adversarial reviewer for writing, product/prototype, architecture, and code work; finds high-risk problems, gives options, recommendations, and strict scores.
 - `novel-to-webcomic`: Adapts prose into comic scripts, visual bibles, finished comic assets, React/Vite webcomic readers, and source-safe retro urban action manga workflows.
 - `student-exam-paper-generator`: Generates printable PDF exam papers and answer sheets for students.
+- `xhs-post-packager`: Creates Xiaohongshu image-post packages with cover art, Kami-style cards, humanized captions, 10+ search tags, and GitHub high-star project cover metadata.
