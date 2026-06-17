@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bagua"
+  short_description: "AI social gossip radar for hot platform drama"
+  default_prompt: "Use $bagua to find and summarize recent high-heat AI gossip from social platforms."
+
+policy:
+  allow_implicit_invocation: true

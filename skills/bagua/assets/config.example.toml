@@ -1,0 +1,78 @@
+[general]
+output_dir = "~/.bagua/runs"
+strict = false
+main_limit = 10
+early_limit = 10
+fresh_hours = 24
+heating_days = 7
+require_gossip_signal = true
+
+[collection]
+request_timeout = 8
+retry_count = 1
+max_pages = 2
+per_query_limit = 8
+results_per_query = 10
+
+[storage]
+sqlite_path = "~/.bagua/bagua.sqlite3"
+
+[watchlist]
+companies = ["OpenAI", "Anthropic", "xAI", "Google DeepMind", "Meta AI", "Mistral", "Perplexity", "Hugging Face", "Cursor"]
+products = ["ChatGPT", "Claude", "Grok", "Gemini", "Llama", "Sora", "Cursor", "Devin"]
+projects = ["vLLM", "LangChain", "LlamaIndex", "ComfyUI"]
+public_figures = []
+
+[blacklist]
+accounts = []
+channels = []
+subreddits = []
+domains = []
+keywords = []
+
+[x]
+enabled = true
+bearer_token = ""
+public_web_best_effort = true
+
+[brave]
+enabled = true
+api_key = ""
+count = 10
+country = "US"
+search_lang = "en"
+
+[reddit]
+enabled = true
+client_id = ""
+client_secret = ""
+user_agent = "bagua/0.1"
+subreddits = ["singularity", "MachineLearning", "LocalLLaMA", "OpenAI", "artificial"]
+
+[telegram]
+enabled = true
+bot_token = ""
+seed_channels = []
+public_channel_pages = true
+suggest_sources = true
+
+[llm]
+enabled = false
+base_url = "https://api.openai.com/v1"
+api_key = ""
+model = "gpt-4.1-mini"
+
+[scoring.weights.heat]
+cross_platform = 35
+engagement = 20
+source_prominence = 15
+controversy = 15
+recency = 10
+evidence = 5
+
+[scoring.weights.credibility]
+first_party = 35
+verifiable_evidence = 25
+independent_sources = 20
+source_reputation = 10
+claim_specificity = 10
