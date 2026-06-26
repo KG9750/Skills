@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage: claude-code-review [options] [-- files...]
+
+Run local Claude Code as an independent read-only reviewer for the current
+project, without needing to remember the Claude Code install path.
+
+Options:
+  --target PATH       Project directory to review. Defaults to the current dir.
+  --scope SCOPE       Review scope: diff, branch, repo, files, plan. Default: diff.
+  --prompt TEXT       Extra review instructions.
+  --model MODEL       Claude model or alias to pass to Claude Code.
+  --effort LEVEL      Effort level to pass to Claude Code. Defaults to
+                      CLAUDE_CODE_REVIEW_EFFORT or low.
+  --max-budget-usd N  Maximum Claude Code API spend for this review.
+  --output PATH       Write Claude Code output to a file as well as stdout.
+  --dry-run           Print the resolved Claude command and prompt, then exit.
+  -h, --help          Show this help.
+
+Examples:
+  claude-code-review --scope diff
+  claude-code-review --target /path/to/repo --scope repo
+  claude-code-review --scope files -- src/app.ts tests/app.test.ts
+USAGE
+}
+
+target="$PWD"
+scope="diff"
+extra_prompt=""
+model=""
+effort="${CLAUDE_CODE_REVIEW_EFFORT:-low}"
+max_budget="${CLAUDE_CODE_REVIEW_MAX_BUDGET_USD:-}"
+output=""
+dry_run=0
+files=()
+
+while (($#)); do
+  case "$1" in
+    --target)
+      [[ $# -ge 2 ]] || { echo "Missing value for --target" >&2; exit 2; }
+      target="$2"
+      shift 2
+      ;;
+    --scope)
+      [[ $# -ge 2 ]] || { echo "Missing value for --scope" >&2; exit 2; }
+      scope="$2"
+      shift 2
+      ;;
+    --prompt)
+      [[ $# -ge 2 ]] || { echo "Missing value for --prompt" >&2; exit 2; }
+      extra_prompt="$2"
+      shift 2
+      ;;
+    --model)
+      [[ $# -ge 2 ]] || { echo "Missing value for --model" >&2; exit 2; }
+      model="$2"
+      shift 2
+      ;;
+    --effort)
+      [[ $# -ge 2 ]] || { echo "Missing value for --effort" >&2; exit 2; }
+      effort="$2"
+      shift 2
+      ;;
+    --max-budget-usd)
+      [[ $# -ge 2 ]] || { echo "Missing value for --max-budget-usd" >&2; exit 2; }
+      max_budget="$2"
+      shift 2
+      ;;
+    --output)
+      [[ $# -ge 2 ]] || { echo "Missing value for --output" >&2; exit 2; }
+      output="$2"
+      shift 2
+      ;;
+    --dry-run)
+      dry_run=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      files=("$@")
+      break
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      files+=("$1")
+      shift
+      ;;
+  esac
+done
+
+case "$scope" in
+  diff|branch|repo|files|plan) ;;
+  *)
+    echo "Unsupported scope '$scope'. Use diff, branch, repo, files, or plan." >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! -d "$target" ]]; then
+  echo "Target directory does not exist: $target" >&2
+  exit 2
+fi
+
+if [[ -n "${CLAUDE_BIN:-}" ]]; then
+  claude_bin="$CLAUDE_BIN"
+elif command -v claude >/dev/null 2>&1; then
+  claude_bin="$(command -v claude)"
+elif [[ -x /opt/homebrew/bin/claude ]]; then
+  claude_bin="/opt/homebrew/bin/claude"
+else
+  echo "Claude Code CLI not found. Install it or set CLAUDE_BIN=/path/to/claude." >&2
+  exit 127
+fi
+
+if [[ -n "$output" ]]; then
+  mkdir -p "$(dirname "$output")"
+fi
+
+file_list=""
+if ((${#files[@]})); then
+  printf -v file_list '%s\n' "${files[@]}"
+fi
+
+prompt="$(cat <<EOF
+You are an independent Claude Code reviewer being invoked by Codex.
+
+Review target: $target
+Scope: $scope
+
+Rules:
+- Review only. Do not edit, create, delete, rename, or format files.
+- Prioritize correctness, regressions, data loss, security, interface contracts, missing tests, and risky assumptions.
+- Put findings first, ordered by severity.
+- Cite concrete files, lines, symbols, commands, or traces whenever possible.
+- If evidence is insufficient, label the item as an unverified risk.
+- Keep style-only comments out unless they hide a real maintainability problem.
+
+Scope guidance:
+- diff: review current uncommitted and staged changes.
+- branch: review changes on the current branch against its likely base.
+- repo: review the repository at a higher level for important risks.
+- files: review only the listed files.
+- plan: review the described plan or architecture, not implementation.
+
+Files, if scope is files:
+$file_list
+
+Extra instructions:
+$extra_prompt
+EOF
+)"
+
+cmd=("$claude_bin" --bare --add-dir "$target" -p --permission-mode plan --effort "$effort" --no-session-persistence)
+if [[ -n "$model" ]]; then
+  cmd+=(--model "$model")
+fi
+if [[ -n "$max_budget" ]]; then
+  cmd+=(--max-budget-usd "$max_budget")
+fi
+cmd+=("$prompt")
+
+if ((dry_run)); then
+  printf 'cd %q\n' "$target"
+  printf 'command:'
+  printf ' %q' "${cmd[@]}"
+  printf '\n\nprompt:\n%s\n' "$prompt"
+  exit 0
+fi
+
+cd "$target"
+if [[ -n "$output" ]]; then
+  "${cmd[@]}" | tee "$output"
+else
+  "${cmd[@]}"
+fi
