@@ -1,4 +1,4 @@
 interface:
   display_name: "Claude Code Review"
-  short_description: "Call local Claude Code for independent code reviews."
-  default_prompt: "Use $claude-code-review for Claude Code review / cc审查 of the current project or diff, then summarize the highest-risk findings."
+  short_description: "Claude-only reviews and Codex-CC cross review."
+  default_prompt: "Use $claude-code-review for cc 审查, cc审查, or 交叉审查 of the current project or diff, then adjudicate the highest-risk findings."
