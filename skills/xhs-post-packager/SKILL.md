@@ -1,6 +1,6 @@
 ---
 name: xhs-post-packager
-description: Create Xiaohongshu/XHS/小红书 image-post packages from a user topic. Use when the user wants a 小红书 note/post, 5-10 image carousel, cover card, imagegen-generated minimalist cover background, humanized Chinese copy with reduced AI flavor, restrained line-art accents, substantive caption/post body, hashtags, alt text, posting checklist, ready-to-upload manual publishing package, or optional semi-automated publish-assist draft filling. This skill generates content, humanizes the copy, splits it into poster images, renders PNG cards with optional cover background and simple sketches, writes a concrete publish-ready caption, creates a publish payload, and zips the assets for hand publishing; it does not automate login, captcha handling, or final live posting.
+description: 'Create Xiaohongshu/XHS image-post packages from a topic: 5-10 portrait cards, cover background, humanized Chinese copy, caption, hashtags, alt text, checklist, publish payload, and zip. Use for 小红书 note/post, carousel cards, ready-to-upload manual packages, or publish-assist draft filling; never automate login, captcha, final publish, or private API bypass.'
 ---
 
 # XHS Post Packager
@@ -125,6 +125,6 @@ Use this only when the user explicitly asks to assist posting an already generat
 
 ## Resource Use
 
-- Read `references/post-spec.md` before writing the JSON spec.
-- Use `scripts/render_xhs_package.py` for deterministic packaging.
+- Read [the post spec reference](references/post-spec.md) before writing the JSON spec.
+- Use [the renderer script](scripts/render_xhs_package.py) for deterministic packaging.
 - If the user supplies brand colors, fonts, images, or examples, adapt the spec while keeping the script's schema.

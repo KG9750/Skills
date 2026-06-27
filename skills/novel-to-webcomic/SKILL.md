@@ -1,6 +1,6 @@
 ---
 name: novel-to-webcomic
-description: Use when adapting user-provided, licensed, or public-domain novels, chapters, outlines, or prose into comics, webtoons, manga, manhua, graphic-novel scripts, finished comic page assets, image prompts, asset manifests, and React/Vite webcomic webpages. Also use for original retro 1980s-1990s urban action manga storyboards, detective/commission-driven comic cases, hardboiled action-comedy visual bibles, and source-safe City Hunter technique analysis. Triggers include requests like 把小说改编成漫画, 直接出漫画, 成稿漫画网页, 小说转漫画网页, webtoon, manga, manhua, comic adaptation, storyboard, panel script, 都市动作漫画, 侦探漫画, 委托型漫画, 硬派枪战喜剧分镜, 复古日漫视觉 bible, 漫画分镜技法分析, safe City Hunter-like urban action pacing, or webcomic reader.
+description: Adapt user-provided, licensed, or public-domain prose into comic scripts, storyboards, finished page assets, image prompts, manifests, and React/Vite webcomic readers. Use for 小说改编漫画, 直接出漫画, webtoon, manga, manhua, storyboard, panel script, 成稿漫画网页, 都市动作漫画, hardboiled action-comedy cases, source-safe retro urban action pacing, or City Hunter technique analysis.
 ---
 
 # Novel to Webcomic
@@ -85,7 +85,7 @@ exact copied panel layout, logo, watermark.
 7. **Web build**: use an existing frontend if present; otherwise copy `assets/vite-webcomic-template/` into the project and populate `public/asset-manifest.json` and assets.
 8. **QA**: run manifest validation, build the app, verify desktop/mobile rendering, confirm source links and controls work, check assets load, and visually inspect that dialogue quotation, panel layout variety, and text-image matching all pass.
 
-Read `references/adaptation-workflow.md` when planning story adaptation, output mode, comic scripts, or image prompts. Read `references/urban-action-style.md` when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read `references/city-hunter-technique-notes.md` when the user asks specifically for City Hunter, Tsukasa Hojo, technique analysis, source-backed notes, or style constraints. Read `references/webcomic-app.md` when building or modifying the React/Vite reader.
+Read [adaptation workflow](references/adaptation-workflow.md) when planning story adaptation, output mode, comic scripts, or image prompts. Read [urban action style](references/urban-action-style.md) when the user asks for City Hunter-like, 80s urban action, hardboiled comedy, private-justice, or stylish city suspense influence. Read [City Hunter technique notes](references/city-hunter-technique-notes.md) when the user asks specifically for City Hunter, Tsukasa Hojo, technique analysis, source-backed notes, or style constraints. Read [webcomic app notes](references/webcomic-app.md) when building or modifying the React/Vite reader. Use [manifest validation](scripts/validate_manifest.py) before final delivery and [the Vite webcomic template](assets/vite-webcomic-template/package.json) when no existing app is available.
 
 ## Build Web Apps Coordination
 
