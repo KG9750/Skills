@@ -19,7 +19,6 @@ Options:
   --model MODEL       Claude model or alias to pass to Claude Code.
   --effort LEVEL      Effort level to pass to Claude Code. Defaults to
                       CLAUDE_CODE_REVIEW_EFFORT or low.
-  --max-budget-usd N  Maximum Claude Code API spend for this review.
   --output PATH       Write Claude Code output to a file as well as stdout.
   --dry-run           Print the resolved Claude command and prompt, then exit.
   -h, --help          Show this help.
@@ -41,7 +40,6 @@ disagreements=""
 extra_prompt=""
 model=""
 effort="${CLAUDE_CODE_REVIEW_EFFORT:-low}"
-max_budget="${CLAUDE_CODE_REVIEW_MAX_BUDGET_USD:-}"
 output=""
 dry_run=0
 files=()
@@ -86,11 +84,6 @@ while (($#)); do
     --effort)
       [[ $# -ge 2 ]] || { echo "Missing value for --effort" >&2; exit 2; }
       effort="$2"
-      shift 2
-      ;;
-    --max-budget-usd)
-      [[ $# -ge 2 ]] || { echo "Missing value for --max-budget-usd" >&2; exit 2; }
-      max_budget="$2"
       shift 2
       ;;
     --output)
@@ -304,12 +297,9 @@ EOF
     ;;
 esac
 
-cmd=("$claude_bin" --bare --add-dir "$target" -p --permission-mode plan --effort "$effort" --no-session-persistence)
+cmd=("$claude_bin" --bare --setting-sources= --add-dir "$target" -p --permission-mode plan --effort "$effort" --no-session-persistence)
 if [[ -n "$model" ]]; then
   cmd+=(--model "$model")
-fi
-if [[ -n "$max_budget" ]]; then
-  cmd+=(--max-budget-usd "$max_budget")
 fi
 cmd+=("$prompt")
 

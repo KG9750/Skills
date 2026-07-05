@@ -106,7 +106,7 @@ Final report shape:
 
 Do not restart a full review during convergence. Ask Claude only to resolve listed disagreements, provide stronger evidence, concede/downgrade, or state exactly what evidence would be needed. New findings may enter the final report only if they are critical blockers.
 
-The wrapper runs Claude Code in `--bare` mode with `--effort low` by default to avoid slow default startup context on this machine. Use `--effort medium|high|xhigh|max` only when the review needs deeper reasoning and latency is acceptable.
+The wrapper runs Claude Code in clean review mode by default: `--bare`, `--setting-sources=`, `--no-session-persistence`, `--permission-mode plan`, and `--effort low`. This avoids the slow or hanging default startup path on this machine, including noisy workspace settings, hooks, and trust/session state. Use `--effort medium|high|xhigh|max` only when the review needs deeper reasoning and latency is acceptable.
 
 ## Command Examples
 
@@ -168,18 +168,13 @@ LEDGER
 claude-code-review --target "$target" --scope diff --mode converge --disagreements "$disagreements" --output "$claude_converge"
 ```
 
-Limit cost for a larger review:
-
-```bash
-claude-code-review --scope repo --max-budget-usd 1
-```
-
 For large plan reviews, split the plan into focused prompts such as schema, incremental flow, bot coverage, and release gate. Treat an empty output file as a failed review, not as approval.
 
 ## Safety Rules
 
 - Prefer `--scope diff` for normal code-review requests.
-- Keep Claude Code in review mode. The script runs with `--permission-mode plan` and tells Claude not to modify files.
+- Keep Claude Code in review mode. The script runs with `--bare`, `--setting-sources=`, `--no-session-persistence`, and `--permission-mode plan`, then tells Claude not to modify files.
+- Do not add a Claude budget cap by default; this skill intentionally omits `--max-budget-usd` because low budgets caused false failures during review smoke tests.
 - If Claude Code reports findings without enough evidence, verify the relevant files yourself before presenting them as confirmed.
 - For cross-review debate, serious findings must have file, line, command, trace, contract, or explicit reasoning-chain evidence before they become confirmed findings.
 - Treat Claude Code output as challenger input, not ground truth.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Claude Code Review"
   short_description: "Claude-only reviews and Codex-CC cross review."
-  default_prompt: "Use $claude-code-review for cc 审查, cc审查, or 交叉审查 of the current project or diff, then adjudicate the highest-risk findings."
+  default_prompt: "Use $claude-code-review for cc 审查, cc审查, or 交叉审查 of the current project or diff. Run the clean bare Claude reviewer path without a budget cap, then adjudicate the highest-risk findings."
