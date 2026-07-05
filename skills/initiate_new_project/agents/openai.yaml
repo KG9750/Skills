@@ -1,0 +1,4 @@
+interface:
+  display_name: "Initiate New Project"
+  short_description: "Scaffold progressive project docs"
+  default_prompt: "Use $initiate_new_project to scaffold progressive-disclosure docs for this project."
