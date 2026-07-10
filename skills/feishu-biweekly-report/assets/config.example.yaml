@@ -1,0 +1,43 @@
+# Copy this file outside the skill directory and pass it with --config.
+department: "部门名称"
+
+period:
+  # Leave empty to use the most recent 14 days ending today.
+  start: ""
+  end: ""
+
+feishu:
+  base_url: "https://open.feishu.cn"
+  # env: FEISHU_APP_ID/FEISHU_APP_SECRET; lark_cli: use the active secure CLI profile.
+  auth_source: "env"
+  expected_app_id: ""
+  report_rule_id: "6894419345318182932"
+  user_id_type: "open_id"
+  members:
+    - name: "张三"
+      user_id: "ou_xxx"
+    - name: "李四"
+      user_id: "ou_yyy"
+  chats:
+    - chat_id: "oc_xxx"
+      name: "部门项目群"
+  # To search every group and P2P conversation visible to the authorized user:
+  # messages:
+  #   mode: "user_search"
+  #   include: ["group", "p2p"]
+  #   page_size: 50
+  #   max_pages: 40
+  target_document_id: "docx_xxx"
+
+fallback:
+  # Optional local JSON files. Use these when the official report API or chat
+  # history command is unavailable during development.
+  reports_json: ""
+  chats_json: ""
+
+llm:
+  provider: "deepseek"
+  model: "deepseek-v4-pro"
+
+output:
+  dir: "/tmp/feishu-biweekly-report"

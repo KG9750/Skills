@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书双周报生成助手"
+  short_description: "配置飞书数据源，汇总周报与聊天事项，生成结构化双周报"
+  default_prompt: "Use $feishu-biweekly-report to extract recent Feishu reports and chat highlights, then append a structured biweekly report to the target document."
