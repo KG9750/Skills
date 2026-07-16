@@ -1,5 +1,6 @@
 # Copy this file outside the skill directory and pass it with --config.
 department: "部门名称"
+timezone: "Asia/Shanghai"
 
 period:
   # Leave empty to use the most recent 14 days ending today.
@@ -27,6 +28,8 @@ feishu:
   #   include: ["group", "p2p"]
   #   page_size: 50
   #   max_pages: 40
+  #   exclude_chat_ids: []
+  #   exclude_sender_ids: []
   target_document_id: "docx_xxx"
 
 fallback:
@@ -36,8 +39,16 @@ fallback:
   chats_json: ""
 
 llm:
-  provider: "deepseek"
-  model: "deepseek-v4-pro"
+  provider: "openai"
+  model: "gpt-5.6"
+  chunk_size: 100
+
+privacy:
+  raw_retention_hours: 24
+  max_message_chars: 8000
+  redact_patterns: []
+
+project_aliases: {}
 
 output:
   dir: "/tmp/feishu-biweekly-report"
