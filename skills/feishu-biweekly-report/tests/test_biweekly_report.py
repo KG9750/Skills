@@ -131,6 +131,24 @@ class ConfigValidationTests(unittest.TestCase):
             with self.assertRaisesRegex(runner.SafeBlocker, "OPENAI_API_KEY"):
                 runner.run_preflight(config, skip_ai=False, write_requested=False)
 
+    def test_preflight_checks_message_scopes_for_configured_chats(self) -> None:
+        config = {
+            "department": "销售部",
+            "timezone": "Asia/Shanghai",
+            "feishu": {
+                "auth_source": "lark_cli",
+                "report_rule_id": "rule-1",
+                "members": [{"name": "张三", "user_id": "ou_1"}],
+                "chats": [{"chat_id": "oc_1"}],
+            },
+            "llm": {"provider": "openai", "model": "gpt-5.6"},
+        }
+
+        with mock.patch.object(runner, "run_lark_cli_json", return_value={"ok": True}) as call:
+            runner.run_preflight(config, skip_ai=True, write_requested=False)
+
+        self.assertEqual(call.call_args.args[0][:2], ["auth", "check"])
+
 
 class FailureSurfaceTests(unittest.TestCase):
     def test_lark_cli_timeout_is_reported_as_safe_blocker(self) -> None:
@@ -192,6 +210,36 @@ class MessageCollectionTests(unittest.TestCase):
 
         self.assertEqual(len(messages), 2)
         self.assertEqual(len(calls), 3)
+
+    def test_configured_chats_use_lark_message_search_path(self) -> None:
+        config = {
+            "timezone": "Asia/Shanghai",
+            "feishu": {"chats": [{"chat_id": "oc_1", "name": "项目群"}]},
+            "fallback": {},
+        }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with mock.patch.object(runner, "collect_user_messages", return_value=[]) as collect:
+                runner.collect_chats(config, date(2026, 7, 1), date(2026, 7, 14), Path(tmp))
+
+        scoped_config = collect.call_args.args[0]
+        self.assertEqual(scoped_config["feishu"]["messages"]["chat_ids"], ["oc_1"])
+
+    def test_message_search_scopes_configured_chat_ids(self) -> None:
+        config = {
+            "timezone": "Asia/Shanghai",
+            "feishu": {"messages": {"chat_ids": ["oc_1", "oc_2"]}},
+        }
+
+        with mock.patch.object(
+            runner,
+            "run_lark_cli_json",
+            return_value={"data": {"messages": [], "has_more": False}},
+        ) as search:
+            runner.collect_user_messages(config, date(2026, 7, 1), date(2026, 7, 14))
+
+        arguments = search.call_args.args[0]
+        self.assertEqual(arguments[arguments.index("--chat-id") + 1], "oc_1,oc_2")
 
 
 class ModelInputSafetyTests(unittest.TestCase):

@@ -23,7 +23,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from render_biweekly_report import render
 
 
-SKILL_VERSION = "2.0.0"
+SKILL_VERSION = "2.0.1"
 
 
 class SafeBlocker(RuntimeError):
@@ -142,7 +142,7 @@ def run_preflight(config: dict[str, Any], skip_ai: bool, write_requested: bool) 
     if auth_source == "lark_cli":
         verify_lark_cli_app(text(feishu.get("expected_app_id")))
         message_config = feishu.get("messages") or {}
-        if text(message_config.get("mode")) == "user_search":
+        if text(message_config.get("mode")) == "user_search" or as_list(feishu.get("chats")):
             scope = "search:message im:message:readonly im:message.group_msg:get_as_user im:message.p2p_msg:get_as_user"
             auth = run_lark_cli_json(["auth", "check", "--scope", scope], "message scope preflight")
             if not auth.get("ok"):
@@ -447,6 +447,7 @@ def collect_message_window(
     page_size = int(message_config.get("page_size") or 50)
     max_pages = int(message_config.get("max_pages") or 40)
     include_types = {text(item) for item in as_list(message_config.get("include")) if text(item)} or {"group", "p2p"}
+    chat_ids = [text(item) for item in as_list(message_config.get("chat_ids")) if text(item)]
     excluded_chats = {text(item) for item in as_list(message_config.get("exclude_chat_ids")) if text(item)}
     excluded_senders = {text(item) for item in as_list(message_config.get("exclude_sender_ids")) if text(item)}
 
@@ -474,6 +475,8 @@ def collect_message_window(
             arguments.extend(["--chat-type", "group"])
         elif include_types == {"p2p"}:
             arguments.extend(["--chat-type", "p2p"])
+        if chat_ids:
+            arguments.extend(["--chat-id", ",".join(chat_ids)])
         if page_token:
             arguments.extend(["--page-token", page_token])
 
@@ -549,32 +552,16 @@ def collect_chats(config: dict[str, Any], start: date, end: date, output_dir: Pa
     if not chats:
         return []
 
-    helper = Path.home() / ".codex/skills/feishu-cli-chat/scripts/fetch_chat_history.py"
-    if not helper.exists() or shutil.which("feishu-cli") is None:
-        raise SafeBlocker("chat collection blocked: feishu-cli or feishu-cli-chat helper is unavailable; set fallback.chats_json for dry development")
-
-    collected: list[dict[str, Any]] = []
-    for chat in chats:
-        chat_dir = output_dir / "chat" / text(chat.get("chat_id"))
-        chat_dir.mkdir(parents=True, exist_ok=True)
-        subprocess.run(
-            [
-                sys.executable,
-                str(helper),
-                text(chat.get("chat_id")),
-                "--start",
-                f"{start.isoformat()}T00:00:00",
-                "--end",
-                f"{(end + timedelta(days=1)).isoformat()}T00:00:00",
-                "--output-dir",
-                str(chat_dir),
-            ],
-            check=True,
-        )
-        timeline = chat_dir / "timeline.txt"
-        if timeline.exists():
-            collected.append({"title": text(chat.get("name")) or text(chat.get("chat_id")), "summary": timeline.read_text(encoding="utf-8"), "source": text(chat.get("chat_id"))})
-    return collected
+    chat_ids = [text(chat.get("chat_id")) for chat in chats if text(chat.get("chat_id"))]
+    if len(chat_ids) != len(chats):
+        raise SafeBlocker("config invalid: every feishu.chats item requires chat_id")
+    scoped_config = dict(config)
+    scoped_feishu = dict(feishu)
+    scoped_messages = dict(message_config)
+    scoped_messages["chat_ids"] = chat_ids
+    scoped_feishu["messages"] = scoped_messages
+    scoped_config["feishu"] = scoped_feishu
+    return collect_user_messages(scoped_config, start, end)
 
 
 def deterministic_summary(config: dict[str, Any], start: date, end: date, members: list[dict[str, Any]], chat_items_raw: list[dict[str, Any]]) -> dict[str, Any]:
