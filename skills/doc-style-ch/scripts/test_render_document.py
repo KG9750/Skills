@@ -97,6 +97,13 @@ class RendererTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "language must be a string"):
             RENDERER.render_document(self.document, self.template)
 
+    def test_rejects_null_characters_in_text(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {"type": "paragraph", "text": "原文 \x00CODE0\x00 与 `真实代码`"}
+        ]
+        with self.assertRaisesRegex(ValueError, "null character"):
+            RENDERER.render_document(self.document, self.template)
+
     def test_rejects_unsafe_image_url(self) -> None:
         self.document["sections"][0]["blocks"] = [
             {"type": "image", "src": "javascript:alert(1)", "alt": "坏链接"}
@@ -125,6 +132,22 @@ class RendererTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported URL"):
             RENDERER.render_document(self.document, self.template)
 
+    def test_rejects_newlines_in_image_paths(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {"type": "image", "src": "images/example\n.png", "alt": "坏路径"}
+        ]
+        with self.assertRaisesRegex(ValueError, "line breaks"):
+            RENDERER.render_document(self.document, self.template)
+
+    def test_rejects_unsafe_inline_links(self) -> None:
+        for url in ("javascript:alert(1)", "data:text/html,bad"):
+            with self.subTest(url=url):
+                self.document["sections"][0]["blocks"] = [
+                    {"type": "paragraph", "text": f"[坏链接]({url})"}
+                ]
+                with self.assertRaisesRegex(ValueError, "unsupported URL scheme|unsafe URL"):
+                    RENDERER.render_document(self.document, self.template)
+
     def test_rejects_bad_table_width(self) -> None:
         self.document["sections"][0]["blocks"] = [
             {"type": "table", "headers": ["A", "B"], "rows": [["only one"]]}
@@ -132,10 +155,76 @@ class RendererTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "header width"):
             RENDERER.render_document(self.document, self.template)
 
+    def test_rejects_tables_without_data_rows(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {"type": "table", "headers": ["项目", "结果"], "rows": []}
+        ]
+        with self.assertRaisesRegex(ValueError, "non-empty array"):
+            RENDERER.render_document(self.document, self.template)
+
     def test_rejects_sections_without_content_blocks(self) -> None:
         self.document["sections"][0]["blocks"] = []
         with self.assertRaisesRegex(ValueError, "non-empty array"):
             RENDERER.render_document(self.document, self.template)
+
+    def test_rejects_missing_required_fields(self) -> None:
+        invalid_documents = [
+            ({"title": "文档"}, "sections"),
+            ({"title": "文档", "sections": None}, "sections"),
+            ({"title": "文档", "sections": "第一节"}, "sections"),
+            (
+                {
+                    "title": "文档",
+                    "sections": [
+                        {"blocks": [{"type": "paragraph", "text": "正文"}]}
+                    ],
+                },
+                "title",
+            ),
+            ({"title": "文档", "sections": [{"title": "第一节"}]}, "blocks"),
+            (
+                {
+                    "title": "文档",
+                    "sections": [
+                        {"title": "第一节", "blocks": [{"type": "image", "alt": "图"}]}
+                    ],
+                },
+                "src",
+            ),
+            (
+                {
+                    "title": "文档",
+                    "sections": [
+                        {
+                            "title": "第一节",
+                            "blocks": [{"type": "image", "src": "images/a.png"}],
+                        }
+                    ],
+                },
+                "alt",
+            ),
+            (
+                {
+                    "title": "文档",
+                    "sections": [
+                        {"title": "第一节", "blocks": [{"type": "callout"}]}
+                    ],
+                },
+                "text",
+            ),
+        ]
+        for document, field in invalid_documents:
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(ValueError, field):
+                    RENDERER.render_document(document, self.template)
+
+    def test_callout_defaults_to_note_tone_and_title(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {"type": "callout", "text": "默认提示。"}
+        ]
+        result = RENDERER.render_document(self.document, self.template)
+        self.assertIn('<aside class="callout note">', result)
+        self.assertIn('<h3 class="callout-title">提示</h3>', result)
 
     def test_renders_supported_blocks_and_inline_markup(self) -> None:
         self.document["sections"][0]["blocks"] = [

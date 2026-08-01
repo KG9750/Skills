@@ -40,6 +40,8 @@ PLACEHOLDER_PATTERN = re.compile(r"\{\{([A-Z_]+)\}\}")
 def require_string(value: object, label: str, allow_empty: bool = False) -> str:
     if not isinstance(value, str):
         raise ValueError(f"{label} must be a string")
+    if "\x00" in value:
+        raise ValueError(f"{label} contains an unsupported null character")
     if not allow_empty and not value.strip():
         raise ValueError(f"{label} must be a non-empty string")
     return value
@@ -47,6 +49,8 @@ def require_string(value: object, label: str, allow_empty: bool = False) -> str:
 
 def safe_url(value: object, label: str) -> str:
     url = require_string(value, label)
+    if "\n" in url or "\r" in url:
+        raise ValueError(f"{label} must not contain line breaks")
     parsed = urlparse(url)
     if parsed.scheme and parsed.scheme not in {"http", "https", "mailto"}:
         raise ValueError(f"{label} uses an unsupported URL scheme")
@@ -135,8 +139,8 @@ def render_block(block: object, section_index: int, block_index: int) -> str:
         rows = block.get("rows")
         if not isinstance(headers, list) or not headers:
             raise ValueError(f"{label}.headers must be a non-empty array")
-        if not isinstance(rows, list):
-            raise ValueError(f"{label}.rows must be an array")
+        if not isinstance(rows, list) or not rows:
+            raise ValueError(f"{label}.rows must be a non-empty array")
         width = len(headers)
         if any(not isinstance(row, list) or len(row) != width for row in rows):
             raise ValueError(f"{label}.rows must match the header width")
@@ -179,8 +183,12 @@ def render_document(document: object, template: str) -> str:
         allow_empty=True,
     )
     meta = document.get("meta", [])
-    if not isinstance(meta, list) or any(not isinstance(item, str) for item in meta):
+    if not isinstance(meta, list):
         raise ValueError("meta must be an array of strings")
+    meta = [
+        require_string(item, "meta[]", allow_empty=True)
+        for item in meta
+    ]
     sections = document.get("sections")
     if not isinstance(sections, list) or not sections:
         raise ValueError("sections must be a non-empty array")
