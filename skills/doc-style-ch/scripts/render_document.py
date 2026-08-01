@@ -51,6 +51,8 @@ def validated_url(value: object, label: str) -> str:
     url = require_string(value, label)
     if "\n" in url or "\r" in url:
         raise ValueError(f"{label} must not contain line breaks")
+    # Keep percent-encoding intact: under the URL Standard, an encoded colon in
+    # a relative reference is path data, not a scheme delimiter.
     parsed = urlparse(url)
     if parsed.scheme and parsed.scheme not in {"http", "https", "mailto"}:
         raise ValueError(f"{label} uses an unsupported URL scheme")

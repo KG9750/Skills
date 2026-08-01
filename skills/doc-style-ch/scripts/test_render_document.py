@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -187,6 +190,17 @@ class RendererTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "unsupported URL scheme|unsafe URL"):
                     RENDERER.render_document(self.document, self.template)
 
+    def test_keeps_percent_encoded_colons_as_relative_links(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {
+                "type": "paragraph",
+                "text": "[编码路径](javascript%3Aexample.html)",
+            }
+        ]
+        result = RENDERER.render_document(self.document, self.template)
+        self.assertIn('href="javascript%3Aexample.html"', result)
+        self.assertNotIn('href="javascript:', result)
+
     def test_rejects_bad_table_width(self) -> None:
         self.document["sections"][0]["blocks"] = [
             {"type": "table", "headers": ["A", "B"], "rows": [["only one"]]}
@@ -308,12 +322,53 @@ class RendererTests(unittest.TestCase):
         ):
             self.assertIn(expected, result)
 
+    def test_renders_document_defaults_and_optional_omissions(self) -> None:
+        section = {
+            "title": "默认行为",
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "text": (
+                        "[**相对链接**](docs/file.html)、[邮件](mailto:test@example.com)，"
+                        "以及 **包含 `代码一`** 和 `代码二`。"
+                    ),
+                },
+                {"type": "quote", "text": "无出处引文。"},
+                {"type": "image", "src": "images/example.png", "alt": "无说明图片"},
+                {"type": "code", "text": "plain text"},
+            ],
+        }
+        document = {"title": "最小默认文档", "meta": [], "sections": [section]}
+        result = RENDERER.render_document(document, self.template)
+        for expected in (
+            '<p class="section-eyebrow">SECTION</p>',
+            '<a href="docs/file.html"><strong>相对链接</strong></a>',
+            '<a href="mailto:test@example.com">邮件</a>',
+            '<strong>包含 <code>代码一</code></strong>',
+            '<code>代码二</code>',
+            '<code class="language-text">',
+            '<div class="meta"></div>',
+        ):
+            self.assertIn(expected, result)
+        self.assertNotIn("<cite>", result)
+        self.assertNotIn("<figcaption>", result)
+
     def test_cli_output_is_self_contained(self) -> None:
-        result = RENDERER.render_document(self.document, self.template)
         with tempfile.TemporaryDirectory() as directory:
-            output = Path(directory) / "document.html"
-            output.write_text(result, encoding="utf-8")
+            input_path = Path(directory) / "input.json"
+            output = Path(directory) / "nested" / "document.html"
+            input_path.write_text(
+                json.dumps(self.document, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [sys.executable, str(SCRIPT), str(input_path), str(output)],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
             text = output.read_text(encoding="utf-8")
+            self.assertIn(f"Rendered {output}", completed.stdout)
             self.assertIn("<style>", text)
             self.assertNotIn("https://fonts", text)
 
