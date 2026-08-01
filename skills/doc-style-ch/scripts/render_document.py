@@ -34,10 +34,13 @@ PLACEHOLDERS = {
     "CONTENT_HTML",
     "FOOTER_HTML",
 }
+PLACEHOLDER_PATTERN = re.compile(r"\{\{([A-Z_]+)\}\}")
 
 
 def require_string(value: object, label: str, allow_empty: bool = False) -> str:
-    if not isinstance(value, str) or (not allow_empty and not value.strip()):
+    if not isinstance(value, str):
+        raise ValueError(f"{label} must be a string")
+    if not allow_empty and not value.strip():
         raise ValueError(f"{label} must be a non-empty string")
     return value
 
@@ -47,9 +50,23 @@ def safe_url(value: object, label: str) -> str:
     parsed = urlparse(url)
     if parsed.scheme and parsed.scheme not in {"http", "https", "mailto"}:
         raise ValueError(f"{label} uses an unsupported URL scheme")
+    if parsed.netloc and not parsed.scheme:
+        raise ValueError(f"{label} uses an unsupported URL form")
     if url.lstrip().lower().startswith(("javascript:", "data:")):
         raise ValueError(f"{label} uses an unsafe URL")
     return html.escape(url, quote=True)
+
+
+def safe_image_url(value: object, label: str) -> str:
+    url = require_string(value, label)
+    parsed = urlparse(url)
+    if (
+        parsed.scheme in {"http", "https", "mailto"}
+        or parsed.netloc
+        or url.startswith(("/", "\\"))
+    ):
+        raise ValueError(f"{label} must use a relative local path")
+    return safe_url(url, label)
 
 
 def inline_markup(value: object, label: str) -> str:
@@ -133,11 +150,14 @@ def render_block(block: object, section_index: int, block_index: int) -> str:
         return f'<div class="table-wrap"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
     if block_type == "code":
         code = html.escape(require_string(block.get("text"), label + ".text"))
-        language = html.escape(str(block.get("language", "text")), quote=True)
+        language = html.escape(
+            require_string(block.get("language", "text"), label + ".language"),
+            quote=True,
+        )
         return f'<pre><code class="language-{language}">{code}</code></pre>'
     if block_type == "divider":
         return '<hr class="divider">'
-    src = safe_url(block.get("src"), label + ".src")
+    src = safe_image_url(block.get("src"), label + ".src")
     alt = html.escape(require_string(block.get("alt"), label + ".alt"), quote=True)
     caption = block.get("caption")
     caption_html = (
@@ -152,8 +172,12 @@ def render_document(document: object, template: str) -> str:
     if not isinstance(document, dict):
         raise ValueError("document must be a JSON object")
     title = require_string(document.get("title"), "title")
-    subtitle = str(document.get("subtitle", ""))
-    kicker = str(document.get("kicker", "DOC STYLE · CH"))
+    subtitle = require_string(document.get("subtitle", ""), "subtitle", allow_empty=True)
+    kicker = require_string(
+        document.get("kicker", "DOC STYLE · CH"),
+        "kicker",
+        allow_empty=True,
+    )
     meta = document.get("meta", [])
     if not isinstance(meta, list) or any(not isinstance(item, str) for item in meta):
         raise ValueError("meta must be an array of strings")
@@ -168,10 +192,14 @@ def render_document(document: object, template: str) -> str:
         if not isinstance(section, dict):
             raise ValueError(f"{label} must be an object")
         section_title = require_string(section.get("title"), label + ".title")
-        eyebrow = str(section.get("eyebrow", "SECTION"))
+        eyebrow = require_string(
+            section.get("eyebrow", "SECTION"),
+            label + ".eyebrow",
+            allow_empty=True,
+        )
         blocks = section.get("blocks")
-        if not isinstance(blocks, list):
-            raise ValueError(f"{label}.blocks must be an array")
+        if not isinstance(blocks, list) or not blocks:
+            raise ValueError(f"{label}.blocks must be a non-empty array")
         section_id = f"section-{section_index:02d}"
         toc_items.append(
             f'<a href="#{section_id}"><span class="toc-number">{section_index:02d}</span>'
@@ -202,13 +230,13 @@ def render_document(document: object, template: str) -> str:
         "CONTENT_HTML": "\n".join(section_items),
         "FOOTER_HTML": inline_markup(document.get("footer", ""), "footer"),
     }
-    output = template
-    for key, value in replacements.items():
-        output = output.replace("{{" + key + "}}", value)
-    leftovers = set(re.findall(r"\{\{([A-Z_]+)\}\}", output))
-    if leftovers:
-        raise ValueError(f"template contains unresolved placeholders: {sorted(leftovers)}")
-    return output
+    unknown = set(PLACEHOLDER_PATTERN.findall(template)) - PLACEHOLDERS
+    if unknown:
+        raise ValueError(f"template contains unresolved placeholders: {sorted(unknown)}")
+    return PLACEHOLDER_PATTERN.sub(
+        lambda match: replacements[match.group(1)],
+        template,
+    )
 
 
 def main() -> None:

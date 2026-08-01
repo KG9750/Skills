@@ -1,11 +1,11 @@
 ---
 name: doc-style-ch
-description: Generate polished Chinese documents in a reusable ink-paper and cinnabar visual system. Use when the user asks for doc-style-CH, 朱砂宣纸风、墨色中文长文、研究报告、方案、说明书、项目文档或需要统一中文文档视觉格式的自包含 HTML 文档。Do not use for blind testing, scoring, answer-key sealing, or evaluation workflows unless the user explicitly adds those requirements.
+description: Generate polished Chinese documents in a reusable ink-paper and cinnabar visual system. Use when the user asks for doc-style-CH, 朱砂宣纸风、墨色中文长文、研究报告、方案、说明书、项目文档或需要统一中文文档视觉格式的离线可读 HTML 文档。Do not use for blind testing, scoring, answer-key sealing, or evaluation workflows unless the user explicitly adds those requirements.
 ---
 
 # doc-style-CH
 
-将中文内容整理成自包含、响应式、可打印的 HTML 文档。固定视觉语言，允许内容结构随任务变化。
+将中文内容整理成离线可读、响应式、可打印的 HTML 文档。样式全部内联；用户提供图片时，将本地图片作为文档附件一同交付。固定视觉语言，允许内容结构随任务变化。
 
 ## 默认交付
 
@@ -48,14 +48,15 @@ python3 scripts/render_document.py input.json output.html
 - 表格只用于确有映射或比较关系的内容。
 - 提示框只突出真正需要注意、决定或执行的内容。
 - 不依赖网络字体、CDN、外部 JavaScript 或远程图片。
-- 用户提供本地图片时，可在 JSON 中使用相对路径；交付时保持 HTML 与图片目录关系稳定。
+- 用户提供本地图片时，只在 JSON 中使用相对路径；交付时保持 HTML 与图片目录关系稳定。
 
 ## 验证
 
 至少检查：
 
-- JSON schema、必填字段和内容块类型合法。
-- HTML 不残留 `{{...}}` 占位符。
+- JSON schema、字段类型、必填字段和内容块类型合法；可选字段省略时使用默认值，出现时不接受 `null`。
+- 图片只引用随文档交付的相对本地路径，不引用远程 URL 或根路径。
+- 模板自身不残留未解析的 `{{...}}` 占位符；用户原文中的同形字符串必须原样保留。
 - 目录链接与章节 `id` 一一对应。
 - 输出不含盲测、评分、A/B、答案键等模板残留。
 - HTML 在无网络环境可读，窄屏不横向溢出，打印时侧栏不遮挡正文。
