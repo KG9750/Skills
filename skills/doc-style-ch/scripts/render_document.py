@@ -47,7 +47,7 @@ def require_string(value: object, label: str, allow_empty: bool = False) -> str:
     return value
 
 
-def safe_url(value: object, label: str) -> str:
+def validated_url(value: object, label: str) -> str:
     url = require_string(value, label)
     if "\n" in url or "\r" in url:
         raise ValueError(f"{label} must not contain line breaks")
@@ -58,11 +58,15 @@ def safe_url(value: object, label: str) -> str:
         raise ValueError(f"{label} uses an unsupported URL form")
     if url.lstrip().lower().startswith(("javascript:", "data:")):
         raise ValueError(f"{label} uses an unsafe URL")
-    return html.escape(url, quote=True)
+    return url
+
+
+def safe_url(value: object, label: str) -> str:
+    return html.escape(validated_url(value, label), quote=True)
 
 
 def safe_image_url(value: object, label: str) -> str:
-    url = require_string(value, label)
+    url = validated_url(value, label)
     parsed = urlparse(url)
     if (
         parsed.scheme in {"http", "https", "mailto"}
@@ -70,7 +74,7 @@ def safe_image_url(value: object, label: str) -> str:
         or url.startswith(("/", "\\"))
     ):
         raise ValueError(f"{label} must use a relative local path")
-    return safe_url(url, label)
+    return html.escape(url, quote=True)
 
 
 def inline_markup(value: object, label: str) -> str:
@@ -117,7 +121,11 @@ def render_block(block: object, section_index: int, block_index: int) -> str:
         return f"<{tag}>{rendered}</{tag}>"
     if block_type == "quote":
         quote = inline_markup(block.get("text"), label + ".text")
-        cite = block.get("cite")
+        cite = (
+            require_string(block["cite"], label + ".cite", allow_empty=True)
+            if "cite" in block
+            else None
+        )
         cite_html = (
             f"<cite>{inline_markup(cite, label + '.cite')}</cite>"
             if cite is not None
@@ -161,15 +169,21 @@ def render_block(block: object, section_index: int, block_index: int) -> str:
         return f'<pre><code class="language-{language}">{code}</code></pre>'
     if block_type == "divider":
         return '<hr class="divider">'
-    src = safe_image_url(block.get("src"), label + ".src")
-    alt = html.escape(require_string(block.get("alt"), label + ".alt"), quote=True)
-    caption = block.get("caption")
-    caption_html = (
-        f"<figcaption>{inline_markup(caption, label + '.caption')}</figcaption>"
-        if caption is not None
-        else ""
-    )
-    return f'<figure><img src="{src}" alt="{alt}" loading="lazy">{caption_html}</figure>'
+    if block_type == "image":
+        src = safe_image_url(block.get("src"), label + ".src")
+        alt = html.escape(require_string(block.get("alt"), label + ".alt"), quote=True)
+        caption = (
+            require_string(block["caption"], label + ".caption", allow_empty=True)
+            if "caption" in block
+            else None
+        )
+        caption_html = (
+            f"<figcaption>{inline_markup(caption, label + '.caption')}</figcaption>"
+            if caption is not None
+            else ""
+        )
+        return f'<figure><img src="{src}" alt="{alt}" loading="lazy">{caption_html}</figure>'
+    raise AssertionError(f"unhandled block type: {block_type}")
 
 
 def render_document(document: object, template: str) -> str:
@@ -225,7 +239,11 @@ def render_document(document: object, template: str) -> str:
             f'<div class="blocks">{block_html}</div></section>'
         )
 
-    lead = document.get("lead")
+    lead = (
+        require_string(document["lead"], "lead", allow_empty=True)
+        if "lead" in document
+        else None
+    )
     replacements = {
         "DOCUMENT_TITLE": html.escape(title),
         "DOCUMENT_SUBTITLE": html.escape(subtitle),

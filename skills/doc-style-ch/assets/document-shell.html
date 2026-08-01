@@ -25,7 +25,7 @@
       --content: 78rem;
       --reading: 48rem;
       --sidebar: 18rem;
-      --line: 1px solid color-mix(in srgb, var(--ink-2) 32%, transparent);
+      --line: 1px solid rgba(120, 109, 98, .32);
     }
 
     * { box-sizing: border-box; }
@@ -139,6 +139,7 @@
       font-size: clamp(1.05rem, 2.4vw, 1.28rem);
       line-height: 1.8;
     }
+    .rail-subtitle:empty, .hero-subtitle:empty { display: none; }
     .lead {
       max-width: var(--reading);
       margin: 2.5rem 0 0;

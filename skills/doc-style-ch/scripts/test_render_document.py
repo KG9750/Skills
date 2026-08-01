@@ -74,6 +74,9 @@ class RendererTests(unittest.TestCase):
         documents = [
             ({**self.document, "subtitle": None}, "subtitle"),
             ({**self.document, "kicker": None}, "kicker"),
+            ({**self.document, "lead": None}, "lead"),
+            ({**self.document, "footer": None}, "footer"),
+            ({**self.document, "meta": None}, "meta"),
             (
                 {
                     **self.document,
@@ -84,10 +87,46 @@ class RendererTests(unittest.TestCase):
                 },
                 "eyebrow",
             ),
+            (
+                {
+                    **self.document,
+                    "sections": [
+                        {
+                            **self.document["sections"][0],
+                            "blocks": [{"type": "quote", "text": "引文", "cite": None}],
+                        },
+                        self.document["sections"][1],
+                    ],
+                },
+                "cite",
+            ),
+            (
+                {
+                    **self.document,
+                    "sections": [
+                        {
+                            **self.document["sections"][0],
+                            "blocks": [
+                                {
+                                    "type": "image",
+                                    "src": "images/a.png",
+                                    "alt": "图",
+                                    "caption": None,
+                                }
+                            ],
+                        },
+                        self.document["sections"][1],
+                    ],
+                },
+                "caption",
+            ),
         ]
         for document, field in documents:
             with self.subTest(field=field):
-                with self.assertRaisesRegex(ValueError, rf"{field} must be a string"):
+                with self.assertRaisesRegex(
+                    ValueError,
+                    rf"{field} must be (?:a string|an array of strings)",
+                ):
                     RENDERER.render_document(document, self.template)
 
     def test_rejects_null_code_language(self) -> None:
@@ -122,7 +161,7 @@ class RendererTests(unittest.TestCase):
                 self.document["sections"][0]["blocks"] = [
                     {"type": "image", "src": src, "alt": "远程图片"}
                 ]
-                with self.assertRaisesRegex(ValueError, "relative local path"):
+                with self.assertRaisesRegex(ValueError, "relative local path|unsupported URL"):
                     RENDERER.render_document(self.document, self.template)
 
     def test_rejects_protocol_relative_inline_links(self) -> None:
@@ -226,6 +265,18 @@ class RendererTests(unittest.TestCase):
         self.assertIn('<aside class="callout note">', result)
         self.assertIn('<h3 class="callout-title">提示</h3>', result)
 
+    def test_rejects_invalid_callout_tone(self) -> None:
+        self.document["sections"][0]["blocks"] = [
+            {"type": "callout", "tone": "danger", "text": "错误提示。"}
+        ]
+        with self.assertRaisesRegex(ValueError, "tone must be note, warning, or success"):
+            RENDERER.render_document(self.document, self.template)
+
+    def test_rejects_unknown_block_type(self) -> None:
+        self.document["sections"][0]["blocks"] = [{"type": "unknown"}]
+        with self.assertRaisesRegex(ValueError, "type is unsupported"):
+            RENDERER.render_document(self.document, self.template)
+
     def test_renders_supported_blocks_and_inline_markup(self) -> None:
         self.document["sections"][0]["blocks"] = [
             {
@@ -265,6 +316,11 @@ class RendererTests(unittest.TestCase):
             text = output.read_text(encoding="utf-8")
             self.assertIn("<style>", text)
             self.assertNotIn("https://fonts", text)
+
+    def test_template_hides_empty_subtitles_and_uses_compatible_line_color(self) -> None:
+        self.assertIn(".rail-subtitle:empty", self.template)
+        self.assertIn(".hero-subtitle:empty", self.template)
+        self.assertNotIn("color-mix(", self.template)
 
 
 if __name__ == "__main__":
