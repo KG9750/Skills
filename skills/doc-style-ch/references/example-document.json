@@ -1,0 +1,52 @@
+{
+  "title": "项目观察与下一步",
+  "subtitle": "一份使用 doc-style-CH 排版的中文示例文档",
+  "kicker": "PROJECT NOTE",
+  "meta": [
+    "示例版本 1.0",
+    "自包含 HTML"
+  ],
+  "lead": "先给出清晰判断，再用章节、证据和行动项展开；视觉克制，信息优先。",
+  "sections": [
+    {
+      "title": "核心判断",
+      "eyebrow": "SUMMARY",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "这套格式适合研究报告、项目方案、说明书与文学长文。它以 **朱砂、宣纸与墨色** 建立统一身份，同时保持现代中文阅读节奏。"
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "使用原则",
+          "text": "不要把每段都装进卡片；让正文保持自然文流，只在真正需要强调时使用提示框。"
+        }
+      ]
+    },
+    {
+      "title": "推荐流程",
+      "eyebrow": "WORKFLOW",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "明确读者、目的和结论。",
+            "将内容整理为章节和合适的内容块。",
+            "运行渲染器生成 HTML，并检查目录、移动端和打印样式。"
+          ]
+        },
+        {
+          "type": "table",
+          "headers": ["内容", "推荐块"],
+          "rows": [
+            ["观点与解释", "paragraph"],
+            ["比较与映射", "table"],
+            ["决定与提醒", "callout"]
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": "由 doc-style-CH 生成。"
+}

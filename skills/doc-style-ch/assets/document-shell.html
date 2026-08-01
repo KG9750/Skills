@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>{{DOCUMENT_TITLE}}</title>
+  <style>
+    :root {
+      --paper-0: #f8f2e7;
+      --paper-1: #efe4d2;
+      --paper-2: #dfcfb8;
+      --ink-0: #2d2722;
+      --ink-1: #514840;
+      --ink-2: #786d62;
+      --cinnabar: #9d382e;
+      --cinnabar-deep: #70251f;
+      --cinnabar-soft: #ecd8cf;
+      --moss: #4f684b;
+      --warning: #8a4b26;
+      --font-display: "Kaiti SC", "STKaiti", "FZKai-Z03", serif;
+      --font-reading: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+      --font-ui: "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-code: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --content: 78rem;
+      --reading: 48rem;
+      --sidebar: 18rem;
+      --line: 1px solid color-mix(in srgb, var(--ink-2) 32%, transparent);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--paper-1); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink-0);
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255,255,255,.7), transparent 32rem),
+        repeating-linear-gradient(7deg, transparent 0 24px, rgba(84,67,50,.025) 25px, transparent 26px 53px),
+        var(--paper-0);
+      font-family: var(--font-reading);
+      line-height: 1.95;
+    }
+
+    a { color: var(--cinnabar-deep); text-underline-offset: .18em; }
+    img { max-width: 100%; height: auto; }
+    .layout { min-height: 100vh; }
+
+    .rail {
+      padding: 2.5rem 1.5rem;
+      color: var(--paper-0);
+      background: var(--ink-0);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .kicker {
+      margin: 0 0 .7rem;
+      color: var(--cinnabar-soft);
+      font-family: var(--font-ui);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .rail-title {
+      max-width: 12ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: .04em;
+    }
+    .rail-subtitle {
+      max-width: 26rem;
+      margin: 1rem 0 0;
+      color: var(--paper-2);
+      font-size: .94rem;
+      line-height: 1.75;
+    }
+    .meta { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.4rem; }
+    .meta span {
+      padding: .18rem .5rem;
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--paper-1);
+      font-family: var(--font-ui);
+      font-size: .72rem;
+    }
+    .toc {
+      display: flex;
+      gap: .45rem;
+      margin-top: 1.7rem;
+      overflow-x: auto;
+      padding-bottom: .5rem;
+    }
+    .toc a {
+      flex: 0 0 auto;
+      min-height: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .35rem .65rem;
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--paper-1);
+      font-family: var(--font-ui);
+      font-size: .82rem;
+      line-height: 1.25;
+      text-decoration: none;
+    }
+    .toc-number { color: var(--cinnabar-soft); font-variant-numeric: tabular-nums; }
+
+    .document {
+      width: min(100%, var(--content));
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 4.5rem) 6rem;
+    }
+    .hero {
+      max-width: var(--reading);
+      padding-bottom: 2.5rem;
+      border-bottom: var(--line);
+    }
+    .hero-kicker {
+      margin: 0 0 .7rem;
+      color: var(--cinnabar);
+      font-family: var(--font-ui);
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+    }
+    .hero h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.7rem, 8vw, 5.2rem);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: .025em;
+    }
+    .hero-subtitle {
+      margin: 1.25rem 0 0;
+      color: var(--ink-1);
+      font-size: clamp(1.05rem, 2.4vw, 1.28rem);
+      line-height: 1.8;
+    }
+    .lead {
+      max-width: var(--reading);
+      margin: 2.5rem 0 0;
+      padding-left: 1.25rem;
+      border-left: .22rem solid var(--cinnabar);
+      color: var(--ink-1);
+      font-size: 1.1rem;
+      line-height: 1.9;
+    }
+
+    .section { margin-top: clamp(4rem, 9vw, 7rem); scroll-margin-top: 2rem; }
+    .section-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: end;
+      gap: 1rem;
+      max-width: var(--reading);
+      padding-bottom: 1rem;
+      border-bottom: .18rem double var(--ink-1);
+    }
+    .section-number {
+      color: var(--cinnabar);
+      font-family: var(--font-reading);
+      font-size: 2.7rem;
+      line-height: .8;
+      font-variant-numeric: tabular-nums;
+    }
+    .section-eyebrow {
+      margin: 0 0 .25rem;
+      color: var(--ink-2);
+      font-family: var(--font-ui);
+      font-size: .7rem;
+      letter-spacing: .16em;
+    }
+    .section h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .blocks { max-width: var(--reading); margin-top: 2rem; }
+    .blocks p { margin: 0 0 1.25rem; font-size: 1.04rem; }
+    .blocks ul, .blocks ol { margin: 0 0 1.5rem; padding-left: 1.6rem; }
+    .blocks li { margin: .45rem 0; padding-left: .25rem; }
+    .blocks li::marker { color: var(--cinnabar); }
+    .divider { width: 4.5rem; margin: 2.5rem 0; border: 0; border-top: 2px solid var(--cinnabar); }
+    blockquote {
+      margin: 2rem 0;
+      padding: 1rem 1.2rem 1rem 1.4rem;
+      border-left: .25rem solid var(--cinnabar);
+      background: rgba(239,228,210,.62);
+      color: var(--ink-1);
+      font-size: 1.08rem;
+    }
+    blockquote p { margin: 0 !important; }
+    blockquote cite { display: block; margin-top: .7rem; color: var(--ink-2); font-family: var(--font-ui); font-size: .78rem; font-style: normal; }
+    .callout {
+      margin: 2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: .28rem solid var(--cinnabar);
+      background: rgba(236,216,207,.55);
+    }
+    .callout.warning { border-color: var(--warning); background: rgba(234,217,192,.62); }
+    .callout.success { border-color: var(--moss); background: rgba(215,225,207,.58); }
+    .callout-title { margin: 0 0 .35rem; font-family: var(--font-ui); font-size: .83rem; font-weight: 700; letter-spacing: .08em; }
+    .callout p { margin: 0; }
+    .table-wrap { max-width: 100%; margin: 2rem 0; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+    th, td { padding: .75rem .8rem; border-bottom: var(--line); text-align: left; vertical-align: top; }
+    th { background: rgba(239,228,210,.75); color: var(--ink-1); font-family: var(--font-ui); font-size: .78rem; letter-spacing: .04em; }
+    pre {
+      margin: 2rem 0;
+      padding: 1.2rem;
+      overflow-x: auto;
+      background: var(--ink-0);
+      color: var(--paper-0);
+      font-family: var(--font-code);
+      font-size: .88rem;
+      line-height: 1.65;
+    }
+    code { font-family: var(--font-code); }
+    :not(pre) > code { padding: .08em .3em; background: var(--paper-1); color: var(--cinnabar-deep); font-size: .88em; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: .65rem; color: var(--ink-2); font-family: var(--font-ui); font-size: .8rem; }
+    .footer { max-width: var(--reading); margin-top: 6rem; padding-top: 1.2rem; border-top: var(--line); color: var(--ink-2); font-family: var(--font-ui); font-size: .78rem; }
+
+    @media (min-width: 58rem) {
+      .layout { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); }
+      .rail { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; border-bottom: 0; border-right: 1px solid rgba(255,255,255,.12); }
+      .toc { display: grid; align-content: start; overflow-y: auto; overflow-x: hidden; }
+      .toc a { width: 100%; }
+      .rail-foot { margin-top: auto; color: var(--paper-2); font-family: var(--font-ui); font-size: .72rem; }
+    }
+
+    @media print {
+      @page { margin: 18mm 17mm 20mm; }
+      html, body { background: white; }
+      body { color: #211d19; font-size: 10.5pt; }
+      .layout { display: block; }
+      .rail { position: static; height: auto; padding: 0 0 10mm; color: #211d19; background: white; border-bottom: 1px solid #a99a88; }
+      .rail-title { font-size: 24pt; }
+      .rail-subtitle, .meta span, .toc a, .rail-foot { color: #514840; }
+      .meta span, .toc a { border-color: #cfc1ad; }
+      .toc { display: block; }
+      .toc a { display: inline-flex; margin: 2mm 2mm 0 0; }
+      .document { width: 100%; padding: 0; }
+      .hero { display: none; }
+      .section { break-inside: auto; margin-top: 12mm; }
+      .section-head, blockquote, .callout, table, pre, figure { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="rail">
+      <div>
+        <p class="kicker">{{KICKER}}</p>
+        <h1 class="rail-title">{{DOCUMENT_TITLE}}</h1>
+        <p class="rail-subtitle">{{DOCUMENT_SUBTITLE}}</p>
+        <div class="meta">{{META_HTML}}</div>
+      </div>
+      <nav class="toc" aria-label="文档目录">{{TOC_HTML}}</nav>
+      <div class="rail-foot">doc-style-CH</div>
+    </aside>
+
+    <main class="document">
+      <header class="hero">
+        <p class="hero-kicker">{{KICKER}}</p>
+        <h1>{{DOCUMENT_TITLE}}</h1>
+        <p class="hero-subtitle">{{DOCUMENT_SUBTITLE}}</p>
+      </header>
+      {{LEAD_HTML}}
+      {{CONTENT_HTML}}
+      <footer class="footer">{{FOOTER_HTML}}</footer>
+    </main>
+  </div>
+</body>
+</html>

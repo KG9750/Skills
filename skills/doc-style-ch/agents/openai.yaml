@@ -1,0 +1,4 @@
+interface:
+  display_name: "doc-style-CH"
+  short_description: "将中文内容排成朱砂宣纸风的自包含可打印 HTML 文档"
+  default_prompt: "使用 $doc-style-ch 将这份中文内容整理为朱砂宣纸风的自包含可打印 HTML 文档。"
