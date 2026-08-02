@@ -1,0 +1,4 @@
+interface:
+  display_name: "doc-style-CH"
+  short_description: "将中文内容制作成朱砂宣纸风 HTML、PDF 或 PNG"
+  default_prompt: "使用 $doc-style-ch 将这份中文内容整理为朱砂宣纸风交付物，按我要求的格式生成 HTML、PDF 或 PNG，并验证最终文件。"

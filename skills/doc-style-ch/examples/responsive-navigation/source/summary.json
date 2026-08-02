@@ -1,0 +1,48 @@
+{
+  "title": "响应式中文文档测试",
+  "subtitle": "HTML 自适应 · 悬浮目录 · PDF 与 PNG 无交互控件",
+  "kicker": "DOC-STYLE-CH · QA",
+  "meta": [
+    "1600×2000",
+    "测试版本 1.0"
+  ],
+  "lead": "一次验证三类交付：网页负责阅读与导航，PDF 负责打印归档，PNG 负责快速传播。",
+  "sections": [
+    {
+      "title": "核心结果",
+      "eyebrow": "RESULT",
+      "blocks": [
+        {
+          "type": "bullets",
+          "items": [
+            "320px、768px、1440px 均无页面级横向溢出。",
+            "目录支持 hover、点击、Enter、Escape 和章节跳转。",
+            "PDF 与 PNG 自动隐藏目录按钮和交互目录。"
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "success",
+          "title": "交付合同",
+          "text": "同一套朱砂宣纸视觉语言，针对不同媒介采用不同构图，而不是把网页简单截图或缩小。"
+        }
+      ]
+    },
+    {
+      "title": "验收矩阵",
+      "eyebrow": "MATRIX",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["格式", "画面", "用途"],
+          "rows": [
+            ["HTML", "流式长文 + 悬浮目录", "阅读"],
+            ["PDF", "A4 分页", "归档"],
+            ["PNG", "4:5 固定画布", "分享"]
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": "由 doc-style-CH 测试样例生成。"
+}

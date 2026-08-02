@@ -1,0 +1,114 @@
+{
+  "title": "响应式中文文档：多格式交付测试",
+  "subtitle": "验证窗口自适应、悬浮目录、A4 打印与单张长图交付",
+  "kicker": "DOC-STYLE-CH · QA",
+  "meta": [
+    "测试版本 1.0",
+    "HTML · PDF · PNG",
+    "2026-08-02"
+  ],
+  "lead": "这份示例不是静态截图，而是一套可重复生成的验收样本：同一视觉系统分别服务于响应式网页、正式打印文档和单张纵向长图。",
+  "sections": [
+    {
+      "title": "验收概览",
+      "eyebrow": "ACCEPTANCE",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "测试重点有三项：页面内容随窗口宽度自然重排；左上角目录支持 **hover、点击与键盘**；PDF 和 PNG 不保留网页交互控件。"
+        },
+        {
+          "type": "callout",
+          "tone": "success",
+          "title": "通过标准",
+          "text": "320px、768px、1440px 三档不产生页面级横向滚动，目录能跳到指定章节，最终 PDF 与 PNG 中看不到目录按钮。"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "HTML：离线可读，正文与辅助内容保持清晰层级。",
+            "PDF：A4 纵向分页，中文字形、表格和章节过渡正常。",
+            "PNG：使用单张纵向长画布，尽可能完整呈现全部章节且没有裁切。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "响应式布局",
+      "eyebrow": "RESPONSIVE",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "正文采用单列流式布局，边距、标题字号与章节间距通过 `clamp()` 平滑变化。表格和代码块只在自身容器内滚动，不把整个页面撑宽。"
+        },
+        {
+          "type": "table",
+          "headers": ["窗口", "布局行为", "检查点"],
+          "rows": [
+            ["320px 手机", "单列紧凑排版", "正文可读、按钮 48px、无横向溢出"],
+            ["768px 平板", "单列舒展排版", "目录面板留有安全边距"],
+            ["1440px 桌面", "正文限制最大宽度", "留白稳定、长行不过度拉伸"],
+            ["超宽屏", "内容继续居中", "不随屏幕无限扩张"]
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "响应式设计不是把桌面页面等比缩小，而是让信息层级在不同阅读距离下仍然成立。",
+          "cite": "测试设计原则"
+        }
+      ]
+    },
+    {
+      "title": "目录导航",
+      "eyebrow": "NAVIGATION",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "将鼠标移到左上角深墨图标，目录面板应在短暂淡入后显示。",
+            "点击图标或用键盘 Enter 激活，目录应保持展开。",
+            "选择“多格式交付”，页面应直接滚动到第四节。",
+            "按 Escape，面板应关闭，键盘焦点返回目录按钮。"
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "触屏回退",
+          "text": "触屏设备没有 hover，因此按钮点击必须提供完整功能；任何核心导航都不能只依赖鼠标悬停。"
+        }
+      ]
+    },
+    {
+      "title": "多格式交付",
+      "eyebrow": "DELIVERY",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "HTML 是内容与样式的权威渲染源。PDF 使用 `document` profile 的打印样式；PNG 使用同一完整内容源的 `image` profile 紧凑构图，三者共享纸色、墨色、朱砂和中文排版规则。"
+        },
+        {
+          "type": "table",
+          "headers": ["格式", "Profile", "交互目录", "主要用途"],
+          "rows": [
+            ["HTML", "document", "保留", "在线或离线长文阅读"],
+            ["PDF", "document + print", "隐藏", "打印、归档与正式分发"],
+            ["PNG", "image", "隐藏", "单张长图、归档与分享"]
+          ]
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "text": "python3 scripts/render_document.py source/report.json output/report.html --profile document\npython3 scripts/export_artifacts.py output/report.html --pdf output/pdf/responsive-navigation-test.pdf"
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "不要伪造验收",
+          "text": "单元测试通过不等于版式正确；必须实际打开 HTML、渲染 PDF 页面并查看最终 PNG。"
+        }
+      ]
+    }
+  ],
+  "footer": "doc-style-CH 响应式与多格式交付测试示例。"
+}
