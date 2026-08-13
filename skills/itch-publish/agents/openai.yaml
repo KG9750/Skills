@@ -1,0 +1,4 @@
+interface:
+  display_name: "Itch Publish"
+  short_description: "把完成的素材包整理成专业的 itch.io 待发布商品"
+  default_prompt: "使用 $itch-publish 将我完成的素材包整理为专业、可信且有购买吸引力的 itch.io 本地发布候选。"
