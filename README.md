@@ -21,6 +21,7 @@ Keep future skills in the same `skills/<skill-name>/` structure so they remain i
 - `claude-code-review`: Calls local Claude Code from Codex as an independent read-only reviewer for code, plan, diff, branch, or repository reviews.
 - `certo`: Adversarial reviewer for writing, product/prototype, architecture, and code work; finds high-risk problems, gives options, recommendations, and strict scores.
 - `feishu-biweekly-report`: Collects Feishu Report submissions plus user-authorized group and P2P messages, generates a DeepSeek V4 Pro management summary, and can append it to a target Feishu document.
+- `itch-publish`: Turns finished game-asset packs into professional, verifiable itch.io release candidates with packaging, preview, documentation, Godot, and audit guidance.
 - `novel-to-webcomic`: Adapts prose into comic scripts, visual bibles, finished comic assets, React/Vite webcomic readers, and source-safe retro urban action manga workflows.
 - `student-exam-paper-generator`: Generates printable PDF exam papers and answer sheets for students.
 - `xhs-post-packager`: Creates Xiaohongshu image-post packages with cover art, Kami-style cards, humanized captions, 10+ search tags, and GitHub high-star project cover metadata.
