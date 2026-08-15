@@ -91,7 +91,7 @@ def nearest_existing_directory(path: Path) -> Path:
 def filesystem_is_case_insensitive(directory: Path) -> bool:
     probe_path: Path | None = None
     try:
-        with tempfile.NamedTemporaryFile(prefix=".PixcelCaseProbe-", dir=directory, delete=False) as probe:
+        with tempfile.NamedTemporaryFile(prefix=".PixelCaseProbe-", dir=directory, delete=False) as probe:
             probe_path = Path(probe.name)
         alias = probe_path.with_name(probe_path.name.swapcase())
         return alias.exists() and probe_path.samefile(alias)
@@ -297,7 +297,7 @@ def main() -> None:
         for output_path, output in normalized_frames:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             descriptor, temporary_name = tempfile.mkstemp(
-                prefix=".pixcel-animation-",
+                prefix=".pixel-animation-",
                 suffix=".png",
                 dir=output_path.parent,
             )
@@ -315,7 +315,7 @@ def main() -> None:
     finally:
         for temporary_path, _ in staged_outputs:
             temporary_path.unlink(missing_ok=True)
-    print(f"PIXCEL_ANIMATION_NORMALIZE_PASS frames={len(frames)} scale={scale:.6f} anchor={target_anchor}")
+    print(f"PIXEL_ANIMATION_NORMALIZE_PASS frames={len(frames)} scale={scale:.6f} anchor={target_anchor}")
 
 
 if __name__ == "__main__":

@@ -185,7 +185,7 @@ def main() -> None:
         raise ValueError("normalized result has no opaque pixels after alpha threshold")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary_name = tempfile.mkstemp(
-        prefix=".pixcel-static-",
+        prefix=".pixel-static-",
         suffix=".png",
         dir=output_path.parent,
     )
@@ -198,7 +198,7 @@ def main() -> None:
         temporary_path.unlink(missing_ok=True)
     colors = {color[:3] for _, color in result.getcolors(maxcolors=65536) or [] if color[3] == 255}
     print(
-        f"PIXCEL_NORMALIZE_PASS output={output_path} size={result.size} "
+        f"PIXEL_NORMALIZE_PASS output={output_path} size={result.size} "
         f"bbox={bbox} colors={len(colors)} hard_alpha=true"
     )
 

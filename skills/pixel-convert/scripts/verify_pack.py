@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify a Pixcel Convert pack and optionally load it with Godot."""
+"""Verify a Pixel Convert pack and optionally load it with Godot."""
 
 from __future__ import annotations
 
@@ -534,9 +534,9 @@ def run_godot(pack: Path, godot: Path) -> str:
         timeout=60,
         check=False,
     )
-    if qa_run.returncode != 0 or "PIXCEL_CONVERT_GODOT_QA_PASS" not in qa_run.stdout:
+    if qa_run.returncode != 0 or "PIXEL_CONVERT_GODOT_QA_PASS" not in qa_run.stdout:
         raise RuntimeError("Godot resource QA failed:\n" + qa_run.stdout)
-    return next(line for line in qa_run.stdout.splitlines() if "PIXCEL_CONVERT_GODOT_QA_PASS" in line)
+    return next(line for line in qa_run.stdout.splitlines() if "PIXEL_CONVERT_GODOT_QA_PASS" in line)
 
 
 def main() -> None:
@@ -566,12 +566,12 @@ def main() -> None:
         verify_sources(pack)
         verify_no_delivery_cache(pack)
     print(
-        f"PIXCEL_PACK_SOURCE_QA_PASS assets={len(manifest['assets'])} frames={frame_count} "
+        f"PIXEL_PACK_SOURCE_QA_PASS assets={len(manifest['assets'])} frames={frame_count} "
         f"atlas={manifest['atlas']['size'][0]}x{manifest['atlas']['size'][1]} hard_alpha=true palette=true"
     )
     if godot_result:
         print(godot_result)
-        print(f"PIXCEL_PACK_DELIVERY_QA_PASS cache_free=true uid_sidecars={len(uid_sidecars)}")
+        print(f"PIXEL_PACK_DELIVERY_QA_PASS cache_free=true uid_sidecars={len(uid_sidecars)}")
 
 
 if __name__ == "__main__":

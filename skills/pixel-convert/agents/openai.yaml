@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pixel Convert"
+  short_description: "Concept art to Godot-ready pixel assets"
+  default_prompt: "Use $pixel-convert to turn this concept image into a Godot-ready pixel-art asset pack."
