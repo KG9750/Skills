@@ -98,7 +98,7 @@ def main() -> None:
             output.paste(panel, (x0 + 18, 54))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary_name = tempfile.mkstemp(
-        prefix=".pixcel-preview-",
+        prefix=".pixel-preview-",
         suffix=".png",
         dir=output_path.parent,
     )
@@ -109,7 +109,7 @@ def main() -> None:
         temporary_path.replace(output_path)
     finally:
         temporary_path.unlink(missing_ok=True)
-    print(f"PIXCEL_AB_PREVIEW_PASS panels={len(items)} native=1x nearest=4x output={output_path}")
+    print(f"PIXEL_AB_PREVIEW_PASS panels={len(items)} native=1x nearest=4x output={output_path}")
 
 
 if __name__ == "__main__":

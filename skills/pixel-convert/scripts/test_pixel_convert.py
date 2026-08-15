@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Behavior tests for the Pixcel Convert command-line tools."""
+"""Behavior tests for the Pixel Convert command-line tools."""
 
 from __future__ import annotations
 
@@ -109,7 +109,7 @@ def component_sizes(image: Image.Image, rgb: tuple[int, int, int]) -> list[tuple
     return sizes
 
 
-class PixcelConvertTests(unittest.TestCase):
+class PixelConvertTests(unittest.TestCase):
     def test_suite_collects_without_resource_module(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -124,7 +124,7 @@ class PixcelConvertTests(unittest.TestCase):
                 [
                     sys.executable,
                     str(Path(__file__).resolve()),
-                    "PixcelConvertTests.test_builder_rejects_non_object_pack_spec_without_traceback",
+                    "PixelConvertTests.test_builder_rejects_non_object_pack_spec_without_traceback",
                     "-v",
                 ],
                 text=True,
@@ -538,7 +538,7 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stdout)
-            self.assertIn("pixcel_normalize_pass", result.stdout.lower())
+            self.assertIn("pixel_normalize_pass", result.stdout.lower())
             output = Image.open(root / "output.png").convert("RGBA")
             self.assertEqual(output.getchannel("A").getextrema(), (0, 255))
 
@@ -641,7 +641,7 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stdout)
-            self.assertIn("pixcel_normalize_pass", result.stdout.lower())
+            self.assertIn("pixel_normalize_pass", result.stdout.lower())
             self.assertIsNotNone(Image.open(root / "output.png").convert("RGBA").getchannel("A").getbbox())
 
     def test_static_normalizer_rejects_zero_alpha_threshold(self) -> None:
@@ -661,7 +661,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("alpha threshold must be between 1 and 255", result.stdout.lower())
-            self.assertNotIn("pixcel_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_normalize_pass", result.stdout.lower())
             self.assertFalse((root / "output.png").exists())
 
     def test_static_normalizer_rejects_negative_key_threshold(self) -> None:
@@ -682,7 +682,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("key threshold must be non-negative", result.stdout.lower())
-            self.assertNotIn("pixcel_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_normalize_pass", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
             self.assertFalse((root / "output.png").exists())
 
@@ -712,9 +712,9 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertNotIn("pixcel_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_normalize_pass", result.stdout.lower())
             self.assertEqual(output.read_bytes(), previous)
-            self.assertFalse(any(root.glob(".pixcel-static-*.png")))
+            self.assertFalse(any(root.glob(".pixel-static-*.png")))
 
     def test_animation_group_uses_one_scale_and_shared_anchor(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -778,7 +778,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("source_anchor must be inside the source frame", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertFalse((root / "out_a.png").exists())
             self.assertFalse((root / "out_b.png").exists())
 
@@ -838,7 +838,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("key_threshold must be non-negative", result.stdout.lower())
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
             self.assertFalse((root / "out_a.png").exists())
             self.assertFalse((root / "out_b.png").exists())
@@ -970,7 +970,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("background key must be a six-digit rgb hex string", result.stdout.lower())
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
             self.assertFalse((root / "out_a.png").exists())
             self.assertFalse((root / "out_b.png").exists())
@@ -1098,7 +1098,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("alpha_threshold must be between 1 and 255", result.stdout.lower())
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertFalse((root / "out_a.png").exists())
             self.assertFalse((root / "out_b.png").exists())
 
@@ -1128,7 +1128,7 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stdout)
-            self.assertIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertTrue((root / "out_a.png").exists())
             self.assertTrue((root / "out_b.png").exists())
 
@@ -1191,7 +1191,7 @@ class PixcelConvertTests(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("frames[1] output duplicates another output", result.stdout.lower())
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertFalse((root / "normalized.png").exists())
 
     def test_animation_normalizer_rejects_existing_outputs_before_writing(self) -> None:
@@ -1222,11 +1222,11 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertIn("output already exists", result.stdout.lower())
             self.assertFalse((root / "out/first.png").exists())
             self.assertEqual((root / "out/second.png").read_bytes(), original)
-            self.assertFalse(any(root.rglob(".pixcel-animation-*.png")))
+            self.assertFalse(any(root.rglob(".pixel-animation-*.png")))
 
     def test_animation_normalizer_commit_failure_rolls_back_group(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -1254,9 +1254,9 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertNotIn("pixcel_animation_normalize_pass", result.stdout.lower())
+            self.assertNotIn("pixel_animation_normalize_pass", result.stdout.lower())
             self.assertFalse((root / "out/first.png").exists())
-            self.assertFalse(any(root.rglob(".pixcel-animation-*.png")))
+            self.assertFalse(any(root.rglob(".pixel-animation-*.png")))
 
     def test_builder_rejects_duplicate_asset_ids_before_writing(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -1301,7 +1301,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("fps must be a number", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_build_pass", result.stdout.lower())
+            self.assertNotIn("pixel_build_pass", result.stdout.lower())
             self.assertFalse(output.exists())
 
     def test_builder_rejects_non_boolean_animation_loop(self) -> None:
@@ -1414,7 +1414,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("pack spec must be a json object", result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_build_pass", result.stdout.lower())
+                self.assertNotIn("pixel_build_pass", result.stdout.lower())
                 self.assertFalse(output.exists())
 
     def test_builder_rejects_animation_that_is_not_an_object(self) -> None:
@@ -1430,7 +1430,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("prop/idle must be an object", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_build_pass", result.stdout.lower())
+            self.assertNotIn("pixel_build_pass", result.stdout.lower())
             self.assertFalse(output.exists())
 
     def test_builder_rejects_asset_that_is_not_an_object(self) -> None:
@@ -1452,7 +1452,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("assets[0] must be an object", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_build_pass", result.stdout.lower())
+            self.assertNotIn("pixel_build_pass", result.stdout.lower())
             self.assertFalse(output.exists())
 
     def test_builder_rejects_frame_path_that_is_not_a_non_empty_string(self) -> None:
@@ -1469,7 +1469,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("prop/idle frames[0] must be a non-empty path string", result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_build_pass", result.stdout.lower())
+                self.assertNotIn("pixel_build_pass", result.stdout.lower())
                 self.assertFalse(output.exists())
 
     def test_builder_supports_tall_and_bottom_row_anchors(self) -> None:
@@ -1525,8 +1525,8 @@ class PixcelConvertTests(unittest.TestCase):
             run_tool(str(BUILD), "--spec", str(spec), "--out", str(output))
             result = run_tool(str(VERIFY), "--pack", str(output), "--godot", str(GODOT))
 
-            self.assertIn("PIXCEL_CONVERT_GODOT_QA_PASS", result.stdout)
-            self.assertIn("PIXCEL_PACK_DELIVERY_QA_PASS", result.stdout)
+            self.assertIn("PIXEL_CONVERT_GODOT_QA_PASS", result.stdout)
+            self.assertIn("PIXEL_PACK_DELIVERY_QA_PASS", result.stdout)
             self.assertIn("uid_sidecars=1", result.stdout)
             self.assertFalse((output / ".godot").exists())
             uid_path = output / "demo/main.gd.uid"
@@ -1563,7 +1563,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("error: godot import failed", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+            self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
             self.assertFalse((output / ".godot").exists())
             self.assertFalse((output / "sprites/generated.import").exists())
 
@@ -1600,7 +1600,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("error: godot resource qa failed", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+            self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
             self.assertFalse((output / ".godot").exists())
             self.assertFalse((output / "sprites/generated.ctex").exists())
             manifest = json.loads((output / "asset_manifest.json").read_text(encoding="utf-8"))
@@ -1743,7 +1743,7 @@ class PixcelConvertTests(unittest.TestCase):
 
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("directions must be a list", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_build_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_build_pass", result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
                 self.assertFalse(output.exists())
 
@@ -1773,7 +1773,7 @@ class PixcelConvertTests(unittest.TestCase):
 
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("must be a string", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_build_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_build_pass", result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
                 self.assertFalse(output.exists())
 
@@ -1835,9 +1835,9 @@ class PixcelConvertTests(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertNotIn("pixcel_ab_preview_pass", result.stdout.lower())
+            self.assertNotIn("pixel_ab_preview_pass", result.stdout.lower())
             self.assertEqual(output.read_bytes(), previous)
-            self.assertFalse(any(root.glob(".pixcel-preview-*.png")))
+            self.assertFalse(any(root.glob(".pixel-preview-*.png")))
 
     def test_verifier_rejects_duplicate_manifest_asset_ids(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -1872,7 +1872,7 @@ class PixcelConvertTests(unittest.TestCase):
             self.assertIn("error:", result.stdout.lower())
             self.assertIn("assets", result.stdout.lower())
             self.assertNotIn("traceback", result.stdout.lower())
-            self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+            self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_reports_malformed_manifest_contracts_cleanly(self) -> None:
         cases = ("palette", "atlas", "asset_id", "directions")
@@ -1900,7 +1900,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertIn("error:", result.stdout.lower())
                 self.assertIn("id" if case == "asset_id" else case, result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_reports_missing_atlas_fields_cleanly(self) -> None:
         for field in ("path", "size", "cell", "anchor"):
@@ -1920,7 +1920,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertIn("error:", result.stdout.lower())
                 self.assertIn(field, result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_reports_missing_derived_manifest_fields_cleanly(self) -> None:
         cases = (
@@ -1959,7 +1959,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertIn("error:", result.stdout.lower())
                 self.assertIn("frame" if case.startswith("frame_") else case, result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_reports_missing_grid_and_animations_cleanly(self) -> None:
         cases = ("grid", "animations")
@@ -1982,7 +1982,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(case, result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_checks_spriteframes_animation_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -2022,7 +2022,7 @@ class PixcelConvertTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("fps must be a number", result.stdout.lower())
                 self.assertNotIn("traceback", result.stdout.lower())
-                self.assertNotIn("pixcel_pack_source_qa_pass", result.stdout.lower())
+                self.assertNotIn("pixel_pack_source_qa_pass", result.stdout.lower())
 
     def test_verifier_rejects_non_boolean_loop_and_non_integer_contact_points(self) -> None:
         cases = (

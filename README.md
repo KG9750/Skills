@@ -23,6 +23,6 @@ Keep future skills in the same `skills/<skill-name>/` structure so they remain i
 - `feishu-biweekly-report`: Collects Feishu Report submissions plus user-authorized group and P2P messages, generates a DeepSeek V4 Pro management summary, and can append it to a target Feishu document.
 - `itch-publish`: Turns finished game-asset packs into professional, verifiable itch.io release candidates with packaging, preview, documentation, Godot, and audit guidance.
 - `novel-to-webcomic`: Adapts prose into comic scripts, visual bibles, finished comic assets, React/Vite webcomic readers, and source-safe retro urban action manga workflows.
-- `pixcel-convert`: Converts concept art and reference sheets into reviewed pixel-art assets, transactional Godot packs, and verifiable TileSet and SpriteFrames resources.
+- `pixel-convert`: Converts concept art and reference sheets into reviewed pixel-art assets, transactional Godot packs, and verifiable TileSet and SpriteFrames resources.
 - `student-exam-paper-generator`: Generates printable PDF exam papers and answer sheets for students.
 - `xhs-post-packager`: Creates Xiaohongshu image-post packages with cover art, Kami-style cards, humanized captions, 10+ search tags, and GitHub high-star project cover metadata.

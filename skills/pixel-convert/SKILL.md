@@ -1,9 +1,9 @@
 ---
-name: pixcel-convert
+name: pixel-convert
 description: Convert concept art or reference sheets into clean pixel-art sprites, tiles, static props, and animation frames that Godot can load directly. Use for concept-to-pixel workflows, 16x16/32x32 logical-grid asset packs, semantic redraws, transparent sprite normalization, optional Aseprite refinement, atlas construction, TileSet and SpriteFrames generation, Godot demo scenes, or verification of Godot-ready pixel assets.
 ---
 
-# Pixcel Convert
+# Pixel Convert
 
 Turn concept images into approved semantic pixel redraws, then package them as source PNGs, atlases, Godot TileSets, SpriteFrames, manifests, and a runnable demo. Treat automatic pixelization as a baseline, never as final art.
 
@@ -58,7 +58,7 @@ Do not silently force every object into one grid cell. A 32x32 grid is a placeme
    - Read [references/aseprite-gate.md](references/aseprite-gate.md), then run `scripts/aseprite_gate.py probe`.
    - In `cli` mode, automation may use the discovered binary. In `manual_gui` mode, prepare the gate and use an approved desktop-control tool or ask the user to open the working PNGs. In `unavailable` mode, keep the existing PNG workflow.
    - Run `scripts/aseprite_gate.py prepare` only on normalized frames. Preserve the recorded baselines, edit only working frames, and run `verify` after every edit before promotion; each verification clears any earlier `verified` state until the current working frames pass. Verify detects a baseline that differs from the current prepare record. The local record is an accidental-change check, not protection against deliberately editing both the baseline and its record.
-   - Treat `.aseprite` as editable source. Keep verified PNGs and the Pixcel Convert manifest as canonical Godot inputs.
+   - Treat `.aseprite` as editable source. Keep verified PNGs and the Pixel Convert manifest as canonical Godot inputs.
 
 6. **Stop at the visual gate**
    - Produce an A/B sheet showing every pixel result at native 1x and exact nearest-neighbour 4x, alongside the concept crop. Never reduce the requested 4x view to 2x or 3x to fit a fixed panel.

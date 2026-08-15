@@ -40,7 +40,7 @@ Use Aseprite features deliberately:
 - indexed palette with dithering disabled;
 - slices or pivots as editable metadata, never baked into final PNGs.
 
-Do not invent collision shapes. Keep reference layers hidden from export. Treat `.aseprite` files as editable sources only; canonical Godot input remains verified PNG frames plus the Pixcel Convert manifest.
+Do not invent collision shapes. Keep reference layers hidden from export. Treat `.aseprite` files as editable sources only; canonical Godot input remains verified PNG frames plus the Pixel Convert manifest.
 
 ## Verify before promotion
 
